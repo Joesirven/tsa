@@ -1,4 +1,5 @@
-# volumes:
+volumes:
+  
 services:
   fastapi:
     environment:
