@@ -2,18 +2,19 @@ steps = [
     [
         # "Up" SQL statement
         """
-        CREATE TABLE user (
+        CREATE TABLE users (
             id SERIAL PRIMARY KEY NOT NULL,
             first_name VARCHAR(50) NOT NULL,
             last_name VARCHAR(50) NOT NULL,
             email VARCHAR(50) NOT NULL,
             password VARCHAR(50) NOT NULL,
-            password_confirmation CHKPASS
+            password_confirmation VARCHAR(50) NOT NULL,
+            CONSTRAINT password_match CHECK (password = password_confirmation)
         );
         """,
         # "Down" SQL statement
         """
-        DROP TABLE user;
+        DROP TABLE users;
         """
     ],
     [
@@ -21,13 +22,13 @@ steps = [
         """
         CREATE TABLE plans (
             id SERIAL PRIMARY KEY NOT NULL,
-            start_of_budget TIMESTAMP NOT NULL,
-            end_of_budget TIMESTAMP NOT NULL,
-            trip_duration INTERVAL NOT NULL,
-            trip_start_date TIMESTAMP NOT NULL,
-            automatically_set_date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            required_integer INTEGER NOT NULL,
-            required_money MONEY NOT NULL
+            start_of_budget TIMESTAMPTZ NOT NULL,
+            end_of_budget TIMESTAMPTZ NOT NULL,
+            trip_start_date TIMESTAMPTZ NOT NULL,
+            trip_end_date TIMESTAMPTZ NOT NULL,
+            destination VARCHAR(100) NOT NULL,
+            monthly_budget DECIMAL(7,2) UNSIGNED CHECK (monthly_budget > 0) NOT NULL,
+            users_id FOREIGN KEY REFERENCES users(id) NOT NULL
         );
         """,
         # "Down" SQL statement
@@ -40,7 +41,10 @@ steps = [
         """
         CREATE TABLE savings (
             id SERIAL PRIMARY KEY NOT NULL,
-            plans_id FOREIGN KEY NOT NULL ON DEL
+            plans_id FOREIGN KEY REFERENCES plans(id) NOT NULL,
+            current_amount_saved DECIMAL(7,2) UNSIGNED CHECK (current_amount_saved > 0) NOT NULL,
+            final_goal_amount DECIMAL(7,2) UNSIGNED CHECK (final_goal_amount > 0) NOT NULL,
+            if_saved BOOLEAN DEFAULT 0 NOT NULL
         );
         """,
         # "Down" SQL statement
@@ -53,12 +57,8 @@ steps = [
         """
         CREATE TABLE transactions (
             id SERIAL PRIMARY KEY NOT NULL,
-            required_limited_text VARCHAR(1000) NOT NULL,
-            required_unlimited_text TEXT NOT NULL,
-            required_date_time TIMESTAMP NOT NULL,
-            automatically_set_date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            required_integer INTEGER NOT NULL,
-            required_money MONEY NOT NULL
+            savings_id FOREIGN KEY REFERENCES savings(id) NOT NULL ON DELETE CASCADE
+
         );
         """,
         # "Down" SQL statement
@@ -66,17 +66,16 @@ steps = [
         DROP TABLE transactions;
         """
     ],
-        [
+    [
         # "Up" SQL statement
         """
         CREATE TABLE expenses (
             id SERIAL PRIMARY KEY NOT NULL,
-            name TEXT NOT NULL,
-            cost INTEGER NOT NULL,
-            required_integer INTEGER NOT NULL,
-            paid TIMESTAMP NOT NULL,
-            type TEXT NOT NULL,
-            required_money MONEY NOT NULL
+            name VARCHAR(100) NOT NULL,
+            cost DECIMAL(7,2) UNSIGNED CHECK (cost > 0) NOT NULL,
+            plans_id FOREIGN KEY REFERENCES plans(id) NOT NULL,
+            paid BOOLEAN DEFAULT 0 NOT NULL,
+            type VARCHAR(50) NOT NULL
         );
         """,
         # "Down" SQL statement
@@ -87,18 +86,31 @@ steps = [
     [
         # "Up" SQL statement
         """
-        CREATE TABLE journal (
+        CREATE TABLE expenses_type_vo (
             id SERIAL PRIMARY KEY NOT NULL,
-            location VARCHAR(50) NOT NULL,
-            picture_url VARCHAR(50) NOT NULL,
-            email VARCHAR(50) NOT NULL,
-            password VARCHAR(50) NOT NULL,
-            password_confirmation CHKPASS
+            name FOREIGN KEY REFERNCES expenses(id) NOT NULL
         );
         """,
         # "Down" SQL statement
         """
-        DROP TABLE journal;
+        DROP TABLE expenses_type_vo;
+        """
+    ],
+    [
+        # "Up" SQL statement
+        """
+        CREATE TABLE journals (
+            id SERIAL PRIMARY KEY NOT NULL,
+            location VARCHAR(50) NOT NULL,
+            picture_url VARCHAR(100) NOT NULL,
+            description VARCHAR(200) NOT NULL,
+            rating INTEGER CHECK (rating >= 1 AND rating <= 5) NOT NULL,
+            date TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+        """,
+        # "Down" SQL statement
+        """
+        DROP TABLE journals;
         """
     ],
 
