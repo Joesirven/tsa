@@ -1,5 +1,6 @@
 volumes:
-  
+  tsa:
+    external: true
 services:
   fastapi:
     environment:
@@ -26,3 +27,13 @@ services:
       HOST: "0.0.0.0"
       PUBLIC_URL: http://localhost:3000
       REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+  db:
+    image: postgres:14.5-bullseye
+    volumes:
+      - tsa:/var/lib/postgresql/db
+    environment:
+      POSTGRES_PASSWORD: tsa
+      POSTGRES_USER: tsa
+      POSTGRES_DB: tsa
+    ports:
+      - "15432:5432"
