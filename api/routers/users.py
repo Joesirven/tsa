@@ -1,11 +1,15 @@
-from fastapi import APIRouter
-from queries.users import UserIn
+from fastapi import APIRouter, Depends
+from queries.users import UserIn, UserOut, UserRepository
 
 
 router = APIRouter()
 
 
 @router.post("/users")
-def create_user(user: UserIn):
-  print('user', user)
-  return user
+def create_user(
+  user: UserIn,
+  repo: UserRepository = Depends()
+):
+  return repo.create(user)
+
+
