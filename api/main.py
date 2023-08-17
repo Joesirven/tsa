@@ -2,7 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-from routers import users
+from routers import (
+    users,
+    expenses,
+    expenses_type_vo,
+    journals,
+    plans,
+    savings,
+    transactions
+)
 
 app = FastAPI()
 
@@ -31,3 +39,10 @@ def launch_details():
 
 
 app.include_router(users.router)
+app.include_router(plans.router)
+app.include_router(savings.router)
+app.include_router(transactions.router)
+app.include_router(journals.router)
+app.include_router(expenses.router)
+app.include_router(expenses_type_vo.router)
+

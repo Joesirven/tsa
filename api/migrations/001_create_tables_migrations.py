@@ -44,8 +44,8 @@ steps = [
             id SERIAL PRIMARY KEY NOT NULL,
             plans_id SERIAL NOT NULL,
             CONSTRAINT fk_plans_id FOREIGN KEY(plans_id) REFERENCES plans(id) ON DELETE CASCADE,
-            current_amount_saved DECIMAL(7,2) CHECK (current_amount_saved > 0) NOT NULL,
-            final_goal_amount DECIMAL(7,2) CHECK (final_goal_amount > 0) NOT NULL,
+            current_amount_saved DECIMAL(7,2) CHECK (current_amount_saved >= 0) NOT NULL,
+            final_goal_amount DECIMAL(7,2) CHECK (final_goal_amount >= 0) NOT NULL,
             if_saved BOOLEAN DEFAULT FALSE NOT NULL
         );
         """,
@@ -60,7 +60,9 @@ steps = [
         CREATE TABLE transactions (
             id SERIAL PRIMARY KEY NOT NULL,
             savings_id SERIAL NOT NULL,
-            CONSTRAINT fk_savings_id FOREIGN KEY(savings_id) REFERENCES savings(id) ON DELETE CASCADE
+            CONSTRAINT fk_savings_id FOREIGN KEY(savings_id) REFERENCES savings(id) ON DELETE CASCADE,
+            amount_saved DECIMAL(7,2),
+            date TIMESTAMPTZ
         );
         """,
         # "Down" SQL statement

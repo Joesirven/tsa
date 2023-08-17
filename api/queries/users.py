@@ -2,6 +2,10 @@ from pydantic import BaseModel
 from queries.pool import pool
 
 
+class Error(BaseModel):
+  message: str
+
+
 class UserIn(BaseModel):
   first_name: str
   last_name: str
@@ -21,11 +25,8 @@ class UserOut(BaseModel):
 
 class UserRepository:
   def create(self, user: UserIn) -> UserOut:
-		#connect the databse
     with pool.connection() as conn:
-      #get a cursor (something to run SQL with)
       with conn.cursor() as db:
-      # Run our INSERT statement
         result = db.execute(
           """
           INSERT INTO users
@@ -50,4 +51,5 @@ class UserRepository:
         )
         id = result.fetchone()[0]
         old_data = user.dict()
+        return {"message": "Error, Could not create"}
         return UserOut(id=id, **old_data)
