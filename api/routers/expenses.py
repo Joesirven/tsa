@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Response
-from typing import Union
+from typing import Union, List
 from queries.expenses import Error, ExpenseIn, ExpenseOut, ExpenseRepository
 
 
@@ -14,3 +14,19 @@ def create_expense(
 ):
     response.status_code = 400
     return repo.create(expense)
+
+
+@router.get("/expense", response_model=Union[List[ExpenseOut], Error])
+def get_all(
+    repo: ExpenseRepository = Depends(),
+):
+    return repo.get_all()
+
+
+# @router.put("/expense/{expenses_id}", response_model=Union[ExpenseOut, Error])
+# def update_expense(
+#     expenses_id: int,
+#     expense: ExpenseIn,
+#     repo: ExpenseRepository = Depends(),
+# ) -> Union[Error, ExpenseOut]:
+#     return repo.update(expenses_id, expense)

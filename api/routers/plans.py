@@ -1,13 +1,29 @@
-from fastapi import APIRouter, Depends
-from queries.plans import PlansIn, PlansRepository
+from fastapi import APIRouter, Depends, Response
+from queries.plans import (
+  PlansIn,
+  PlansOut,
+  PlansRepository,
+  Error,
+)
+from typing import Union, List
 
 
 router = APIRouter()
 
 
-@router.post("/plans")
+@router.post("/plans/create", response_model=Union[PlansOut, Error])
 def create_plan(
   plan: PlansIn,
+  response: Response,
   repo: PlansRepository = Depends()
 ):
+  response.status_code = 400
   return repo.create(plan)
+
+
+@router.get("/plans", response_model=Union[Error, List[PlansOut]])
+def get_all(
+  repo: PlansRepository = Depends(),
+):
+
+  return repo.get_all()

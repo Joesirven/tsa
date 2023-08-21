@@ -21,7 +21,7 @@ class UserOut(BaseModel):
   email: str
   password: str
   password_confirmation: str
-  
+
 
 class UserRepository:
   def create(self, user: UserIn) -> UserOut:
@@ -51,5 +51,5 @@ class UserRepository:
         )
         id = result.fetchone()[0]
         old_data = user.dict()
-        return {"message": "Error, Could not create"}
+        # return {"message": "Error, Could not create"}
         return UserOut(id=id, **old_data)

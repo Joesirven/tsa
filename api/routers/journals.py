@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Response
-from typing import Union
+from typing import Union, List
 from queries.journals import Error, JournalIn, JournalOut, JournalRepository
 
 
@@ -14,3 +14,10 @@ def create_journal(
 ):
   response.status_code = 400
   return repo.create(journal)
+
+
+@router.get("/journals", response_model=List[JournalOut])
+def get_all(
+  repo: JournalRepository = Depends(),
+):
+  return repo.get_all()
