@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from queries.pool import pool
 from decimal import Decimal
-from typing import List, Union
+from typing import List, Union, Optional
 
 
 class Error(BaseModel):
@@ -18,6 +18,40 @@ class Expense_type_voOut(BaseModel):
 
 
 class Expense_type_voRepository:
+    def get_one(self, expense_type_vo_id: int) -> Optional[Expense_type_voOut]:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    result = db.execute(
+                        """
+                        SELECT id, name
+                        FROM expenses_type_vo
+                        WHERE id = %s
+                        """,
+                        [expense_type_vo_id]
+                    )
+                    record = result.fetchone()
+                    return self.record_to_expense_type_vo_out(record)
+        except Exception as e:
+            print(e)
+            return {"message": "Could not get that expense_type_vo"}
+
+    def delete(self, expense_type_vo_id: int) -> bool:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        DELETE FROM expenses_type_vo
+                        WHERE id = %s
+                        """,
+                        [expense_type_vo_id]
+                    )
+                    return True
+        except Exception as e:
+            print(e)
+            return False
+
     def update(self, expense_type_vo_id: int, expense_type_vo: Expense_type_voIn) -> Union[Expense_type_voOut, Error]:
         try:
             with pool.connection() as conn:
@@ -38,7 +72,6 @@ class Expense_type_voRepository:
             print(e)
             return {"message": "Could not update expense_type_vo"}
 
-
     def get_all(self) -> Union[Error, List[Expense_type_voOut]]:
         try:
             with pool.connection() as conn:
@@ -50,11 +83,8 @@ class Expense_type_voRepository:
                         """
                     )
                     return [
-                        Expense_type_voOut(
-                            id=record[0],
-                            name=record[1],
-                        )
-                        for record in db
+                        self.record_to_expense_type_vo_out(record)
+                        for record in result
                     ]
         except Exception as e:
             print(e)
@@ -87,3 +117,9 @@ class Expense_type_voRepository:
     def expense_type_vo_in_to_out(self, id: int, expense_type_vo: Expense_type_voIn):
         old_data = expense_type_vo.dict()
         return Expense_type_voOut(id=id, **old_data)
+
+    def record_to_expense_type_vo_out(self, record):
+        return Expense_type_voOut(
+            id=record[0],
+            name=record[1],
+        )

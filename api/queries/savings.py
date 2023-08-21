@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from queries.pool import pool
 from decimal import Decimal
-from typing import List, Union
+from typing import List, Union, Optional
 
 
 class SavingsIn(BaseModel):
@@ -22,6 +22,46 @@ class Error(BaseModel):
 
 
 class SavingsRepository:
+  def get_one(self, savings_id:int) -> Optional[SavingsOut]:
+    try:
+      with pool.connection() as conn:
+        with conn.cursor() as db:
+          result = db.execute(
+            """
+              SELECT id, current_amount_saved, final_goal_amount, if_saved
+              FROM savings
+              WHERE id = %s
+            """,
+            [
+              savings_id
+            ]
+          )
+          record = result.fetchone()
+          if record is None:
+            return None
+          return self.record_to_savings_out(record)
+    except Exception as e:
+      print(e)
+      return {"message": e}
+
+
+  def delete(self, savings_id: int) -> bool:
+    try:
+      with pool.connection() as conn:
+        with conn.cursor() as db:
+          db.execute(
+            """
+            DELETE FROM savings
+            WHERE id = %s
+            """,
+            [savings_id]
+          )
+          return True
+    except Exception as e:
+        print(e)
+        return False
+
+
   def update(self, savings_id:int, savings: SavingsIn) -> Union[SavingsOut, Error]:
     try:
       with pool.connection() as conn:
@@ -92,10 +132,19 @@ class SavingsRepository:
             ]
           )
           id = result.fetchone()[0]
-          self.savings_in_to_out(id, savings)
+          return self.savings_in_to_out(id, savings)
     except Exception as e:
+      print(e)
       return {"message": e}
 
   def savings_in_to_out(self, id:int, savings: SavingsIn):
     old_data = savings.dict()
     return SavingsOut(id=id, **old_data)
+
+  def record_to_savings_out(self, record):
+    return SavingsOut(
+      id=record[0],
+      current_amount_saved=record[1],
+      final_goal_amount=record[2],
+      if_saved=record[3]
+    )

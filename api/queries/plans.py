@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Union
+from typing import List, Union, Optional
 from queries.pool import pool
 from datetime import date
 from decimal import Decimal
@@ -29,6 +29,52 @@ class PlansOut(BaseModel):
 
 
 class PlansRepository:
+  def get_one(self, plan_id:int) -> Optional[PlansOut]:
+    try:
+      with pool.connection() as conn:
+        with conn.cursor() as db:
+          result = db.execute(
+            """
+              SELECT id,
+                start_of_budget,
+                end_of_budget,
+                trip_start_date,
+                trip_end_date,
+                destination,
+                monthly_budget,
+                users_id
+              FROM plans
+              WHERE id = %s
+            """,
+            [
+              plan_id
+            ]
+          )
+          record = result.fetchone()
+          if record is None:
+            return None
+          return self.record_to_plan_out(record)
+    except Exception as e:
+      return {"message": e}
+
+
+  def delete(self, plan_id: int) -> bool:
+    try:
+      with pool.connection() as conn:
+        with conn.cursor() as db:
+          db.execute(
+            """
+            DELETE FROM plans
+            WHERE id = %s
+            """,
+            [plan_id]
+          )
+          return True
+    except Exception as e:
+        print(e)
+        return False
+
+
   def update(self, plan_id: int, plan: PlansIn) -> Union[Error, PlansOut]:
     try:
       #connect the databse
@@ -141,3 +187,15 @@ class PlansRepository:
   def plan_in_to_out(self, id: int, plan: PlansIn):
     old_data = plan.dict()
     return PlansOut(id=id, **old_data)
+
+  def record_to_plan_out(self, record):
+    return PlansOut(
+      id=record[0],
+      start_of_budget=record[1],
+      end_of_budget=record[2],
+      trip_start_date=record[3],
+      trip_end_date=record[4],
+      destination=record[5],
+      monthly_budget=record[6],
+      users_id=record[7]
+    )

@@ -5,7 +5,7 @@ from queries.plans import (
   PlansRepository,
   Error,
 )
-from typing import Union, List
+from typing import Union, List, Optional
 
 
 router = APIRouter()
@@ -17,7 +17,6 @@ def create_plan(
   response: Response,
   repo: PlansRepository = Depends()
 ):
-  response.status_code = 400
   return repo.create(plan)
 
 
@@ -36,3 +35,23 @@ def update_plan(
 ) -> Union[Error, PlansOut]:
 
   return repo.update(plan_id, plan)
+
+
+@router.delete("/plans/{plans_id}", response_model=bool)
+def delete_plan(
+  plan_id: int,
+  repo: PlansRepository = Depends(),
+) -> bool:
+  return repo.delete(plan_id)
+
+
+@router.get("/plans/{plans_id}", response_model=Optional[PlansOut])
+def get_one_plan(
+  plan_id: int,
+  response: Response,
+  repo: PlansRepository = Depends(),
+) -> PlansOut:
+  plan = repo.get_one(plan_id)
+  if plan is None:
+    response.status_code = 404
+  return plan

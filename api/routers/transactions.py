@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Response
-from typing import Union, List
+from typing import Union, List, Optional
 from queries.transactions import TransactionsIn, TransactionsRepository, TransactionsOut, Error
 
 
@@ -9,10 +9,8 @@ router = APIRouter()
 @router.post("/transactions/create", response_model=Union[TransactionsOut, Error])
 def create_transactions(
   transactions: TransactionsIn,
-  response: Response,
   repo: TransactionsRepository = Depends()
 ):
-    response.status_code = 400
     return repo.create(transactions)
 
 
@@ -30,3 +28,23 @@ def update_transactions(
   repo: TransactionsRepository = Depends(),
 ) -> Union[TransactionsOut, Error]:
   return repo.update(transactions_id, transactions)
+
+
+@router.delete("/transactions/{transactions_id}", response_model=bool)
+def delete_transactions(
+  transactions_id: int,
+  repo: TransactionsRepository = Depends(),
+) -> bool:
+  return repo.delete(transactions_id)
+
+
+@router.get("/transactions/{transactions_id}", response_model=Optional[TransactionsOut])
+def get_one_transaction(
+  transactions_id: int,
+  response: Response,
+  repo: TransactionsRepository = Depends(),
+) -> TransactionsOut:
+  transactions = repo.get_one(transactions_id)
+  if transactions is None:
+    response.status_code = 404
+  return transactions
