@@ -21,3 +21,12 @@ def get_all(
     repo: Expense_type_voRepository = Depends(),
 ):
     return repo.get_all()
+
+
+@router.put("/expense_type_vo/{expense_type_vo_id}", response_model=Union[Expense_type_voOut, Error])
+def update_expense_type_vo(
+    expense_type_vo_id: int,
+    expense_type_vo: Expense_type_voIn,
+    repo: Expense_type_voRepository = Depends(),
+) -> Union[Error, Expense_type_voOut]:
+    return repo.update(expense_type_vo_id, expense_type_vo)

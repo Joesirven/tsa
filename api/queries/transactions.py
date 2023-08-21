@@ -20,14 +20,34 @@ class Error(BaseModel):
 
 
 class TransactionsRepository:
-  def get_all(self) -> Union[Error, List[TransactionsOut]]:
+  def update(self, transactions_id:int, transactions: TransactionsIn) -> Union[TransactionsOut, Error]:
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
-          # Run our SELECT statement
-          result = db.execute(
+          db.execute(
+            """
+              UPDATE transactions
+              SET amount_saved = %s,
+                date = %s
+              WHERE id = %s
+            """,
+            [
+              transactions.amount_saved,
+              transactions.date,
+              transactions_id
+            ]
+          )
+          return self.transactions_in_to_out(transactions_id, transactions)
+    except Exception as e:
+      print(e)
+      return {"message": e}
+
+
+  def get_all(self) -> Union[List[TransactionsOut], Error]:
+    try:
+      with pool.connection() as conn:
+        with conn.cursor() as db:
+          db.execute(
             """
               SELECT id, amount_saved, date
               FROM transactions;
@@ -47,11 +67,8 @@ class TransactionsRepository:
 
   def create(self, transactions: TransactionsIn) -> TransactionsOut:
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
-          # Run our INSERT statement
           result = db.execute(
             """
             INSERT INTO transactions
@@ -69,7 +86,10 @@ class TransactionsRepository:
             ]
           )
           id = result.fetchone()[0]
-          old_data = transactions.dict()
-          return TransactionsOut(id=id, **old_data)
+          self.transactions_in_to_out(id, transactions)
     except Exception as e:
       return {"message": e}
+
+  def transactions_in_to_out(self, id: int, transactions: TransactionsIn):
+    old_data = transactions.dict()
+    return TransactionsOut(id=id, **old_data)

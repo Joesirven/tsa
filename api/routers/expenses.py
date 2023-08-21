@@ -23,10 +23,10 @@ def get_all(
     return repo.get_all()
 
 
-# @router.put("/expense/{expenses_id}", response_model=Union[ExpenseOut, Error])
-# def update_expense(
-#     expenses_id: int,
-#     expense: ExpenseIn,
-#     repo: ExpenseRepository = Depends(),
-# ) -> Union[Error, ExpenseOut]:
-#     return repo.update(expenses_id, expense)
+@router.put("/expense/{expense_id}", response_model=Union[ExpenseOut, Error])
+def update_expense(
+    expense_id: int,
+    expense: ExpenseIn,
+    repo: ExpenseRepository = Depends(),
+) -> Union[Error, ExpenseOut]:
+    return repo.update(expense_id, expense)

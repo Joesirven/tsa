@@ -12,12 +12,20 @@ def create_savings(
   response: Response,
   repo: SavingsRepository = Depends()
 ):
-    response.status_code = 400
     return repo.create(savings)
 
 
-@router.get("/savings", response_model=Union[Error, List[SavingsOut]])
+@router.get("/savings", response_model=Union[List[SavingsOut], Error])
 def get_all(
   repo: SavingsRepository = Depends(),
 ):
   return repo.get_all()
+
+
+@router.put("/savings/{savings_id}", response_model=Union[SavingsOut, Error])
+def update_savings(
+  savings_id: int,
+  savings: SavingsIn,
+  repo: SavingsRepository = Depends(),
+) -> Union[Error, SavingsOut]:
+  return repo.update(savings_id, savings)

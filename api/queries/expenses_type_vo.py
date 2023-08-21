@@ -18,6 +18,27 @@ class Expense_type_voOut(BaseModel):
 
 
 class Expense_type_voRepository:
+    def update(self, expense_type_vo_id: int, expense_type_vo: Expense_type_voIn) -> Union[Expense_type_voOut, Error]:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE expenses_type_vo
+                        SET name = %s
+                        WHERE id = %s
+                        """,
+                        [
+                            expense_type_vo.name,
+                            expense_type_vo_id
+                        ]
+                    )
+                    return self.expense_type_vo_in_to_out(expense_type_vo_id, expense_type_vo)
+        except Exception as e:
+            print(e)
+            return {"message": "Could not update expense_type_vo"}
+
+
     def get_all(self) -> Union[Error, List[Expense_type_voOut]]:
         try:
             with pool.connection() as conn:
@@ -40,22 +61,29 @@ class Expense_type_voRepository:
             return {"message": "Could not get all expense_type_vos"}
 
     def create(self, expense_type_vo: Expense_type_voIn) -> Expense_type_voOut:
-        with pool.connection() as conn:
-            with conn.cursor() as db:
-                result = db.execute(
-                    """
-                    INSERT INTO expenses_type_vo
-                        (
-                        name
-                        )
-                    VALUES
-                        (%s)
-                    RETURNING id;
-                    """,
-                    [
-                        expense_type_vo.name
-                    ]
-                )
-                id = result.fetchone()[0]
-                old_data = expense_type_vo.dict()
-                return Expense_type_voOut(id=id, **old_data)
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    result = db.execute(
+                        """
+                        INSERT INTO expenses_type_vo
+                            (
+                            name
+                            )
+                        VALUES
+                            (%s)
+                        RETURNING id;
+                        """,
+                        [
+                            expense_type_vo.name
+                        ]
+                    )
+                    id = result.fetchone()[0]
+                    return self.expense_type_vo_in_to_out(id, expense_type_vo)
+        except Exception as e:
+            print(e)
+            return {"message": "Could not create expense_type_vo"}
+
+    def expense_type_vo_in_to_out(self, id: int, expense_type_vo: Expense_type_voIn):
+        old_data = expense_type_vo.dict()
+        return Expense_type_voOut(id=id, **old_data)

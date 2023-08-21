@@ -21,3 +21,11 @@ def get_all(
   repo: JournalRepository = Depends(),
 ):
   return repo.get_all()
+
+@router.put("/journals/{journal_id}", response_model=Union[Error, JournalOut])
+def update_journal(
+  journal_id: int,
+  journal: JournalIn,
+  repo: JournalRepository = Depends(),
+) -> Union[Error, JournalOut]:
+  return repo.update(journal_id, journal)

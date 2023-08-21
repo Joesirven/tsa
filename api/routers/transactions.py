@@ -21,3 +21,12 @@ def get_all(
   repo: TransactionsRepository = Depends(),
 ):
   return repo.get_all()
+
+
+@router.put("/transactions/{transactions_id}", response_model=Union[TransactionsOut, Error])
+def update_transactions(
+  transactions_id: int,
+  transactions: TransactionsIn,
+  repo: TransactionsRepository = Depends(),
+) -> Union[TransactionsOut, Error]:
+  return repo.update(transactions_id, transactions)

@@ -22,14 +22,35 @@ class Error(BaseModel):
 
 
 class SavingsRepository:
+  def update(self, savings_id:int, savings: SavingsIn) -> Union[SavingsOut, Error]:
+    try:
+      with pool.connection() as conn:
+        with conn.cursor() as db:
+          db.execute(
+            """
+              UPDATE savings
+              SET current_amount_saved = %s,
+                  final_goal_amount = %s,
+                  if_saved = %s
+              WHERE id = %s
+            """,
+            [
+              savings.current_amount_saved,
+              savings.final_goal_amount,
+              savings.if_saved,
+              savings_id
+            ]
+          )
+          return self.savings_in_to_out(savings_id, savings)
+    except Exception as e:
+      return {"message": e}
+
+
   def get_all(self) -> Union[Error, List[SavingsOut]]:
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
-        # Run our SELECT statement
-          result = db.execute(
+          db.execute(
             """
               SELECT id, current_amount_saved, final_goal_amount, if_saved
               FROM savings
@@ -50,11 +71,8 @@ class SavingsRepository:
 
   def create(self, savings: SavingsIn) -> SavingsOut:
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
-          # Run our INSERT statement
           result = db.execute(
             """
             INSERT INTO savings
@@ -74,7 +92,10 @@ class SavingsRepository:
             ]
           )
           id = result.fetchone()[0]
-          old_data = savings.dict()
-          return SavingsOut(id=id, **old_data)
+          self.savings_in_to_out(id, savings)
     except Exception as e:
       return {"message": e}
+
+  def savings_in_to_out(self, id:int, savings: SavingsIn):
+    old_data = savings.dict()
+    return SavingsOut(id=id, **old_data)
