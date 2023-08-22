@@ -168,6 +168,7 @@ class UserRepository:
             user.password_confirmation
             ]
           )
+
           id = result.fetchone()[0]
           return self.user_in_to_out(id, user)
     except DuplicateUserError():

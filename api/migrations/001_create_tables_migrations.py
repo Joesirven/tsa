@@ -7,9 +7,7 @@ steps = [
             first_name VARCHAR(50) NOT NULL,
             last_name VARCHAR(50) NOT NULL,
             email VARCHAR(50) NOT NULL,
-            password VARCHAR(50) NOT NULL,
-            password_confirmation VARCHAR(50) NOT NULL,
-            CONSTRAINT password_match CHECK (password = password_confirmation)
+            hashed_password VARCHAR(50) NOT NULL
         );
         """,
         # "Down" SQL statement
