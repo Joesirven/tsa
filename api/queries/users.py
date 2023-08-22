@@ -33,7 +33,7 @@ class UserOutWithPassword(UserOut):
 
 
 class UserRepository:
-  def get_one(self, user_id: int) ->Optional[UserOut]:
+  def get_one(self, user_id: int) -> Optional[UserOut]:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
