@@ -1,17 +1,49 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import (
+  APIRouter,
+  Depends,
+  Response,
+  HTTPExecption,
+  status,
+  Request,
+  )
 from typing import Union, List, Optional
-from queries.users import Error, UserIn, UserOut, UserRepository
+from queries.users import Error, UserIn, UserOut, UserRepository, DuplicateUserError
+from jwtdown_fastapi.authentication import Token
+from authenticator import authenticator
+from pydantic import BaseModel
+
+class UserFrom(BaseModel):
+  username: str
+  password: str
+
+class UserToken(Token):
+  user: UserOut
+
+class HttpError(BaseModel):
+  detail: str
 
 
 router = APIRouter()
 
 
-@router.post("/user/sign-up", response_model=Union[UserOut, Error])
-def create_user(
+@router.post("/user/sign-up", response_model=UserToken | HttpError)
+async def create_user(
   user: UserIn,
+  request: Request,
+  response: Response,
   repo: UserRepository = Depends()
 ):
-  return repo.create(user)
+  hashed_password = authenticator.hashed_password(user.hashed_password)
+  try:
+    user = repo.create(user, hashed_password)
+  except DuplicateUserError:
+    raise HTTPExecption(
+      status_code = status.HTTP_400_BAD_REQUEST,
+      detail = " cannot create a new user with these credentials"
+    )
+  form = UserFrom(username=user.email, password=user.hashed_password)
+  token = await authenticator.login(response, request, form, repo)
+  return UserToken(user=user, **token.dict())
 
 
 @router.get("/users", response_model=List[UserOut])

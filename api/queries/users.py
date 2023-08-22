@@ -15,8 +15,7 @@ class UserIn(BaseModel):
   first_name: str
   last_name: str
   email: str
-  password: str
-  password_confirmation: str
+  hashed_password: str
 
 
 class UserOut(BaseModel):
@@ -24,8 +23,7 @@ class UserOut(BaseModel):
   first_name: str
   last_name: str
   email: str
-  password: str
-  password_confirmation: str
+  hashed_password: str
 
 
 class UserOutWithPassword(UserOut):
@@ -44,8 +42,7 @@ class UserRepository:
                 first_name,
                 last_name,
                 email,
-                password,
-                password_confirmation
+                hashed_password
                 FROM users
                 WHERE id=%s
               """,
@@ -89,16 +86,14 @@ class UserRepository:
               first_name = %s,
               last_name = %s,
               email = %s,
-              password = %s,
-              password_confirmation = %s
+              hashed_password = %s
             WHERE id = %s
             """,
               [
                 user.first_name,
                 user.last_name,
                 user.email,
-                user.password,
-                user.password_confirmation,
+                user.hashed_password,
                 user_id,
               ]
           )
@@ -120,8 +115,7 @@ class UserRepository:
             first_name,
             last_name,
             email,
-            password,
-            password_confirmation
+            hashed_password
             FROM users
             ORDER BY id
           """
@@ -132,8 +126,7 @@ class UserRepository:
               first_name=entry[1],
               last_name=entry[2],
               email=entry[3],
-              password=entry[4],
-              password_confirmation=entry[5]
+              hashed_password=entry[4]
             )
             for entry in db
           ]
@@ -153,8 +146,7 @@ class UserRepository:
               first_name,
               last_name,
               email,
-              password,
-              password_confirmation
+              hashed_password
               )
             VALUES
               (%s, %s, %s, %s, %s)
@@ -164,11 +156,9 @@ class UserRepository:
             user.first_name,
             user.last_name,
             user.email,
-            user.password,
-            user.password_confirmation
+            user.hashed_password
             ]
           )
-
           id = result.fetchone()[0]
           return self.user_in_to_out(id, user)
     except DuplicateUserError():
@@ -186,6 +176,5 @@ class UserRepository:
           first_name=entry[1],
           last_name=entry[2],
           email=entry[3],
-          password=entry[4],
-          password_confirmation=entry[5]
+          hashed_password=entry[4]
         )
