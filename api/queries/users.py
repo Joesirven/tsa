@@ -3,6 +3,10 @@ from queries.pool import pool
 from typing import List, Union, Optional
 
 
+class DuplicateUserError(ValueError):
+  pass
+
+
 class Error(BaseModel):
   message: str
 
@@ -24,6 +28,9 @@ class UserOut(BaseModel):
   password_confirmation: str
 
 
+class UserOutWithPassword(UserOut):
+  hashed_password: str
+
 
 class UserRepository:
   def get_one(self, user_id: int) ->Optional[UserOut]:
@@ -31,7 +38,7 @@ class UserRepository:
       with pool.connection() as conn:
         with conn.cursor() as db:
           result = db.execute(
-             """
+            """
               SELECT
                 id,
                 first_name,
@@ -135,7 +142,7 @@ class UserRepository:
       return {"message": "could not get users"}
 
 
-  def create(self, user: UserIn) -> UserOut:
+  def create(self, user: UserIn, hashed_password: str) -> UserOut:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -163,9 +170,8 @@ class UserRepository:
           )
           id = result.fetchone()[0]
           return self.user_in_to_out(id, user)
-    except Exception as e:
-      print(e)
-      return {"message": "Could not create a user "}
+    except DuplicateUserError():
+        raise DuplicateUserError()
 
 
   def user_in_to_out(self, id:int, user: UserIn):
