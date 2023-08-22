@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from authenticator import authenticator
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
@@ -13,6 +14,7 @@ from routers import (
 )
 
 app = FastAPI()
+app.include_router(authenticator.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -45,4 +47,3 @@ app.include_router(transactions.router)
 app.include_router(journals.router)
 app.include_router(expenses.router)
 app.include_router(expenses_type_vo.router)
-
