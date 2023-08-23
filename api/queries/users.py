@@ -15,7 +15,7 @@ class UserIn(BaseModel):
   first_name: str
   last_name: str
   email: str
-  hashed_password: str
+  password: str
 
 
 class UserOut(BaseModel):
@@ -23,7 +23,6 @@ class UserOut(BaseModel):
   first_name: str
   last_name: str
   email: str
-  hashed_password: str
 
 
 class UserOutWithPassword(UserOut):
@@ -31,7 +30,7 @@ class UserOutWithPassword(UserOut):
 
 
 class UserRepository:
-  def get_one(self, user_id: int) -> Optional[UserOut]:
+  def get_one(self, email: str) -> UserOutWithPassword:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -44,9 +43,9 @@ class UserRepository:
                 email,
                 hashed_password
                 FROM users
-                WHERE id=%s
+                WHERE email=%s
               """,
-                [user_id]
+                [email]
           )
           entry = result.fetchone()
           if entry is None:
@@ -135,7 +134,7 @@ class UserRepository:
       return {"message": "could not get users"}
 
 
-  def create(self, user: UserIn, hashed_password: str) -> UserOut:
+  def create(self, user: UserIn, password: str) -> UserOutWithPassword:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -156,7 +155,7 @@ class UserRepository:
             user.first_name,
             user.last_name,
             user.email,
-            user.hashed_password
+            user.password
             ]
           )
           id = result.fetchone()[0]

@@ -12,7 +12,7 @@ class TSAAuthenticator(Authenticator):
     ):
         # Use your repo to get the account based on the
         # username (which could be an email)
-        return users.get(email)
+        return users.get_one(email)
 
     def get_account_getter(
         self,
@@ -24,6 +24,7 @@ class TSAAuthenticator(Authenticator):
     def get_hashed_password(self, user: UserOutWithPassword):
         # Return the encrypted password value from your
         # account object
+        print(user)
         return user.hashed_password
 
     def get_user_data_for_cookie(self, user: UserOut):
