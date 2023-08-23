@@ -31,11 +31,12 @@ class UserOutWithPassword(UserOut):
 
 
 class UserRepository:
-  def get_one(self, email: str) -> UserOutWithPassword:
+  def get_one(self, id: int) -> UserOutWithPassword:
+    print(f"id in get {id} ")
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
-          result = db.execute(
+          db.execute(
             """
               SELECT
                 id,
@@ -44,14 +45,16 @@ class UserRepository:
                 email,
                 hashed_password
                 FROM users
-                WHERE email=%s
+                WHERE id=%s
               """,
-                [email]
+                [id]
           )
-          entry = result.fetchone()
+          print(f"db in get {db}")
+          entry = db.fetchone()
+          print(f"in get {entry}")
           if entry is None:
             return None
-          return self.record_to_user_out(entry)
+          return self.user_in_to_out_password(entry)
     except Exception as e:
       print(e)
       return {"message": "could not get user "}
@@ -150,7 +153,7 @@ class UserRepository:
               )
             VALUES
               (%s, %s, %s, %s)
-            RETURNING id;
+            RETURNING id, first_name, last_name, email, hashed_password;
             """,
             [
             user.first_name,
@@ -159,8 +162,23 @@ class UserRepository:
             hashed_password
             ]
           )
-          id = result.fetchone()[0]
-          return self.user_in_to_out(id, user)
+          data = db.fetchone()
+          print(f"data from sql {data}")
+          fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "hashed_password"
+          ]
+          obj = {}
+          for i, col in enumerate(data):
+            obj[fields[i]] = data[i]
+          print(f"this is obj {obj}")
+          entry = self.get_one(obj["id"])
+          print(f"This is entry: {entry}")
+          # return self.user_in_to_out_password(id, user)
+
     except DuplicateUserError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -174,7 +192,9 @@ class UserRepository:
 
   def user_in_to_out_password(self, id:int, user: UserIn):
     old_data = user.dict()
+    print(f"this is is old data: {old_data}")
     return UserOutWithPassword(id=id, **old_data)
+
 
 
   def record_to_user_out(self, entry):
