@@ -5,7 +5,7 @@ from queries.users import UserRepository, UserOut, UserOutWithPassword
 
 
 class TSAAuthenticator(Authenticator):
-    async def get_user_data(
+    async def get_account_data(
         self,
         email: str,
         users: UserRepository,
@@ -14,7 +14,7 @@ class TSAAuthenticator(Authenticator):
         # username (which could be an email)
         return users.get(email)
 
-    def get_user_getter(
+    def get_account_getter(
         self,
         users: UserRepository = Depends(),
     ):

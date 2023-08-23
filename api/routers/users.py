@@ -2,7 +2,7 @@ from fastapi import (
   APIRouter,
   Depends,
   Response,
-  HTTPExecption,
+  HTTPException,
   status,
   Request,
   )
