@@ -104,7 +104,7 @@ class UserRepository:
       return {"message": "could not update user "}
 
 
-  def get_all(self) -> Union[Error, List[UserOut]]:
+  def get_all(self) -> Union[Error, List[UserOutWithPassword]]:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -121,7 +121,7 @@ class UserRepository:
           """
           )
           return [
-            UserOut(
+            UserOutWithPassword(
               id=entry[0],
               first_name=entry[1],
               last_name=entry[2],

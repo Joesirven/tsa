@@ -7,7 +7,14 @@ from fastapi import (
   Request,
   )
 from typing import Union, List, Optional
-from queries.users import Error, UserIn, UserOut, UserRepository, DuplicateUserError
+from queries.users import (
+  Error,
+  UserIn,
+  UserOut,
+  UserRepository,
+  DuplicateUserError,
+  UserOutWithPassword,
+)
 from jwtdown_fastapi.authentication import Token
 from authenticator import authenticator
 from pydantic import BaseModel
@@ -46,7 +53,7 @@ async def create_user(
   return UserToken(user=user, **token.dict())
 
 
-@router.get("/users", response_model=List[UserOut])
+@router.get("/users", response_model=List[UserOutWithPassword])
 def get_all(
   repo: UserRepository = Depends(),
 ):
