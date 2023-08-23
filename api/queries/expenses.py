@@ -26,7 +26,7 @@ class ExpenseOut(BaseModel):
 
 
 class ExpenseRepository:
-    def get_one(self, expense_id:int) -> Optional[ExpenseOut]:
+    def get_one(self, expense_id: int) -> Optional[ExpenseOut]:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:

@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from queries.pool import pool
 from typing import List, Union, Optional
+from fastapi import HTTPException, status
 
 
 class DuplicateUserError(ValueError):
@@ -134,7 +135,7 @@ class UserRepository:
       return {"message": "could not get users"}
 
 
-  def create(self, user: UserIn, password: str) -> UserOutWithPassword:
+  def create(self, user: UserIn, hashed_password: str) -> UserOutWithPassword:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -148,25 +149,32 @@ class UserRepository:
               hashed_password
               )
             VALUES
-              (%s, %s, %s, %s, %s)
+              (%s, %s, %s, %s)
             RETURNING id;
             """,
             [
             user.first_name,
             user.last_name,
             user.email,
-            user.password
+            hashed_password
             ]
           )
           id = result.fetchone()[0]
           return self.user_in_to_out(id, user)
-    except DuplicateUserError():
-        raise DuplicateUserError()
-
+    except DuplicateUserError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot create an account with those credentials",
+        )
 
   def user_in_to_out(self, id:int, user: UserIn):
     old_data = user.dict()
     return UserOut(id=id, **old_data)
+
+
+  def user_in_to_out_password(self, id:int, user: UserIn):
+    old_data = user.dict()
+    return UserOutWithPassword(id=id, **old_data)
 
 
   def record_to_user_out(self, entry):

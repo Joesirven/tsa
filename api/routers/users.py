@@ -28,20 +28,20 @@ router = APIRouter()
 
 @router.post("/user/sign-up", response_model=UserToken | HttpError)
 async def create_user(
-  user: UserIn,
+  info: UserIn,
   request: Request,
   response: Response,
   repo: UserRepository = Depends()
 ):
-  hashed_password = authenticator.hashed_password(user.hashed_password)
+  hashed_password = authenticator.hash_password(info.password)
   try:
-    user = repo.create(user, hashed_password)
+    user = repo.create(info, hashed_password)
   except DuplicateUserError:
-    raise HTTPExecption(
+    raise HTTPException(
       status_code = status.HTTP_400_BAD_REQUEST,
-      detail = " cannot create a new user with these credentials"
+      detail = "Cannot create a new user with these credentials"
     )
-  form = UserFrom(username=user.email, password=user.hashed_password)
+  form = UserFrom(username=info.email, password=info.password)
   token = await authenticator.login(response, request, form, repo)
   return UserToken(user=user, **token.dict())
 
@@ -53,7 +53,7 @@ def get_all(
   return repo.get_all()
 
 @router.put("/user/{user_id}", response_model=Union[Error, UserOut])
-def update_journal(
+def update_user(
   user_id: int,
   user: UserIn,
   repo: UserRepository = Depends(),
@@ -61,14 +61,14 @@ def update_journal(
   return repo.update(user_id, user)
 
 @router.delete("/user/{user_id}", response_model=bool)
-def delete_journal(
+def delete_user(
   user_id: int,
   repo: UserRepository = Depends(),
 ) -> bool:
   return repo.delete(user_id)
 
 @router.get("/user/{user_id}", response_model=Optional[UserOut])
-def get_one_journal(
+def get_one_user(
   user_id: int,
   response: Response,
   repo: UserRepository = Depends(),

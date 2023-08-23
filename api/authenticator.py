@@ -24,7 +24,6 @@ class TSAAuthenticator(Authenticator):
     def get_hashed_password(self, user: UserOutWithPassword):
         # Return the encrypted password value from your
         # account object
-        print(user)
         return user.hashed_password
 
     def get_user_data_for_cookie(self, user: UserOut):
