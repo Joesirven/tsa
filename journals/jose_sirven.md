@@ -11,3 +11,7 @@ Today, we started by creating the separate migration files. Dom was driving the 
 
 ## Aug 21
 We built the get and update endpoints. I felt a lot more confident understanding how FastAPI works high-level - how the queries and the routers interact with each other.
+
+
+## Aug 22
+Tamikia was driving and we built the authenticator token using JWTdown galvanize library. 
