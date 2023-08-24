@@ -40,10 +40,12 @@ async def create_user(
   response: Response,
   repo: UserRepository = Depends()
 ):
+  print("hit function")
   hashed_password = authenticator.hash_password(info.password)
-  print(hashed_password)
+  print(f"lable {hashed_password}")
   try:
     user = repo.create(info, hashed_password)
+    print("finished creating user")
   except DuplicateUserError:
     raise HTTPException(
       status_code = status.HTTP_400_BAD_REQUEST,
@@ -75,13 +77,13 @@ def delete_user(
 ) -> bool:
   return repo.delete(user_id)
 
-@router.get("/user/{user_id}", response_model=Optional[UserOut])
+@router.get("/user/{user_email}", response_model=Optional[UserOut])
 def get_one_user(
-  user_id: int,
+  user_email: str,
   response: Response,
   repo: UserRepository = Depends(),
 ) -> UserOut:
-  user =repo.get_one(user_id)
+  user =repo.get_one(user_email)
   if user is None:
     response.status_code =404
   return user

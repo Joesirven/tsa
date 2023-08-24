@@ -31,30 +31,41 @@ class UserOutWithPassword(UserOut):
 
 
 class UserRepository:
-  def get_one(self, id: int) -> UserOutWithPassword:
-    print(f"id in get {id} ")
+  def get_one(self, email: str) -> UserOutWithPassword:
+    # print(f"id in get {id} ")
+    # print(type(id))
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
           db.execute(
             """
-              SELECT
-                id,
-                first_name,
-                last_name,
-                email,
-                hashed_password
-                FROM users
-                WHERE id=%s
-              """,
-                [id]
+            SELECT
+              id,
+              first_name,
+              last_name,
+              email,
+              hashed_password
+            FROM users
+            WHERE email=%s
+            """,
+            [email],
           )
           print(f"db in get {db}")
           entry = db.fetchone()
           print(f"in get {entry}")
           if entry is None:
             return None
-          return self.user_in_to_out_password(entry)
+          fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "hashed_password"
+          ]
+          obj = {}
+          for i, col in enumerate(entry):
+            obj[fields[i]] = entry[i]
+          return self.user_in_to_out_password(obj)
     except Exception as e:
       print(e)
       return {"message": "could not get user "}
@@ -153,7 +164,7 @@ class UserRepository:
               )
             VALUES
               (%s, %s, %s, %s)
-            RETURNING id, first_name, last_name, email, hashed_password;
+            RETURNING id;
             """,
             [
             user.first_name,
@@ -162,38 +173,28 @@ class UserRepository:
             hashed_password
             ]
           )
-          data = db.fetchone()
+          data = db.fetchone()[0]
           print(f"data from sql {data}")
-          fields = [
-            "id",
-            "first_name",
-            "last_name",
-            "email",
-            "hashed_password"
-          ]
-          obj = {}
-          for i, col in enumerate(data):
-            obj[fields[i]] = data[i]
-          print(f"this is obj {obj}")
-          entry = self.get_one(obj["id"])
-          print(f"This is entry: {entry}")
-          # return self.user_in_to_out_password(id, user)
+          print(f"user data {user.email}")
+          user_dict = {
+            "id": data,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+          }
+          return UserOut(**user_dict)
 
-    except DuplicateUserError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot create an account with those credentials",
-        )
+    except Exception:
+      raise DuplicateUserError()
 
   def user_in_to_out(self, id:int, user: UserIn):
     old_data = user.dict()
     return UserOut(id=id, **old_data)
 
 
-  def user_in_to_out_password(self, id:int, user: UserIn):
-    old_data = user.dict()
-    print(f"this is is old data: {old_data}")
-    return UserOutWithPassword(id=id, **old_data)
+  def user_in_to_out_password(self, user: UserIn):
+    print(f"this is is old data: {user}")
+    return UserOutWithPassword(**user)
 
 
 
