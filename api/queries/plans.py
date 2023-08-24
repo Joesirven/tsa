@@ -3,6 +3,8 @@ from typing import List, Union, Optional
 from queries.pool import pool
 from datetime import date
 from decimal import Decimal
+from authenticator import authenticator
+from fastapi import Depends
 
 class Error(BaseModel):
   message: str
@@ -29,7 +31,11 @@ class PlansOut(BaseModel):
 
 
 class PlansRepository:
-  def get_one(self, plan_id:int) -> Optional[PlansOut]:
+  async def get_one(
+    self,
+    plan_id:int,
+    user_data: dict = Depends(authenticator.get_current_account_data),
+    ) -> Optional[PlansOut]:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -58,7 +64,11 @@ class PlansRepository:
       return {"message": e}
 
 
-  def delete(self, plan_id: int) -> bool:
+  async def delete(
+    self,
+    plan_id: int,
+    user_data: dict = Depends(authenticator.get_current_account_data),
+    ) -> bool:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -75,7 +85,12 @@ class PlansRepository:
         return False
 
 
-  def update(self, plan_id: int, plan: PlansIn) -> Union[Error, PlansOut]:
+  async def update(
+    self,
+    plan_id: int,
+    plan: PlansIn,
+    user_data: dict = Depends(authenticator.get_current_account_data),
+    ) -> Union[Error, PlansOut]:
     try:
       #connect the databse
       with pool.connection() as conn:
@@ -114,7 +129,10 @@ class PlansRepository:
 
 
 
-  def get_all(self) -> Union[Error, List[PlansOut]]:
+  def get_all(
+    self,
+    user_data: dict = Depends(authenticator.get_current_account_data),
+  ) -> Union[Error, List[PlansOut]]:
     try:
       #connect the databse
       with pool.connection() as conn:
@@ -145,7 +163,11 @@ class PlansRepository:
       print(e)
       return {"message": "Could not get all plans."}
 
-  def create(self, plan: PlansIn) -> PlansOut:
+  async def create(
+    self,
+    plan: PlansIn,
+    user_data: dict = Depends(authenticator.get_current_account_data),
+  ) -> PlansOut:
     try:
       #connect the databse
       with pool.connection() as conn:

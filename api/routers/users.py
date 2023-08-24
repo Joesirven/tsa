@@ -33,6 +33,7 @@ class HttpError(BaseModel):
 router = APIRouter()
 
 
+
 @router.post("/user/sign-up", response_model=UserToken | HttpError)
 async def create_user(
   info: UserIn,
@@ -59,6 +60,7 @@ async def create_user(
 @router.get("/users", response_model=List[UserOutWithPassword])
 def get_all(
   repo: UserRepository = Depends(),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ):
   return repo.get_all()
 
@@ -67,6 +69,7 @@ def update_user(
   user_id: int,
   user: UserIn,
   repo: UserRepository = Depends(),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> Union[Error, UserOut]:
   return repo.update(user_id, user)
 
@@ -74,6 +77,7 @@ def update_user(
 def delete_user(
   user_id: int,
   repo: UserRepository = Depends(),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> bool:
   return repo.delete(user_id)
 
@@ -82,6 +86,7 @@ def get_one_user(
   user_email: str,
   response: Response,
   repo: UserRepository = Depends(),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> UserOut:
   user =repo.get_one(user_email)
   if user is None:

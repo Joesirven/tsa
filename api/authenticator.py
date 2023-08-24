@@ -26,10 +26,10 @@ class TSAAuthenticator(Authenticator):
         # account object
         return user.hashed_password
 
-    def get_user_data_for_cookie(self, user: UserOut):
+    def get_account_data_for_cookie(self, user: UserOut):
         # Return the username and the data for the cookie.
         # You must return TWO values from this method.
-        return user.username, UserOut(**user.dict())
+        return user.email, UserOut(**user.dict())
 
 
 authenticator = TSAAuthenticator(os.environ["SIGNING_KEY"])
