@@ -18,7 +18,7 @@ class PlanList extends React.Component {
   }
 
   render() {
-    // const sortedPlans = plans.slice().sort((a, b) => a.trip_start_date.localeCompare(b.trip_start_date));
+    // const sortedPlans = this.state.plans.slice().sort((a, b) => a.trip_start_date.localeCompare(b.trip_start_date));
     // const earliestPlan = sortedPlans.shift();
     // const otherPlans = sortedPlans;
     // console.log("Sorted Plans:", sortedPlans);
@@ -94,6 +94,7 @@ class PlanList extends React.Component {
           </thead>
           <tbody>
             {this.state.plans.map((plans) => {
+              console.log("Fetched Data:", plans);
               return (
                 <tr key={plans.id}>
                   <td>{plans.start_of_budget}</td>
