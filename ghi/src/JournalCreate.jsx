@@ -60,7 +60,7 @@ function JournalCreate() {
                             <label htmlFor="rating">Rating</label>
                         </div>
                         <div className="form-floating mb-3">
-                            <input onChange={handleFormChange} value={formData.date} placeholder="Enter date" required type="text" name="date" id="date" className="form-control" />
+                            <input onChange={handleFormChange} value={formData.date} placeholder="Enter date" required type="date" name="date" id="date" className="form-control" />
                             <label htmlFor="date">Date</label>
                         </div>
                         <button className="btn btn-primary">Create New Journal</button>
