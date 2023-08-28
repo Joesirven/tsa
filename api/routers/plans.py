@@ -25,7 +25,7 @@ async def create_plan(
 @router.get("/plans", response_model=Union[Error, List[PlansOut]])
 async def get_all(
   repo: PlansRepository = Depends(),
-  user_data: dict = Depends(authenticator.get_current_account_data),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ):
 
   return repo.get_all()

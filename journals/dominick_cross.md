@@ -21,3 +21,9 @@ Continued working on backend authentication.
 
 # 24 August
 Finished backend authentication.
+
+# 25 August
+Started on plans list frontend.
+
+# 28 August
+Data displayed on plans list page
