@@ -44,7 +44,7 @@ class PlanList extends React.Component {
             {earliestPlan && (
               <div className="card">
                 <div className="card-body">
-                  <h5 className="card-title">Earliest Plan</h5>
+                  <h5 className="card-title">Current Plan</h5>
                   <p>{earliestPlan.destination}</p>
                   <p>{earliestPlan.trip_start_date}</p>
                 </div>
