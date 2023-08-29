@@ -27,3 +27,5 @@ Started on plans list frontend.
 
 # 28 August
 Data displayed on plans list page
+
+# 29 August
