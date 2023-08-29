@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class PlanList extends React.Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class PlanList extends React.Component {
 
   render() {
     const { plans } = this.state;
-
     let earliestPlan = null;
     let otherPlans = [];
 
@@ -57,6 +57,9 @@ class PlanList extends React.Component {
                 <div className="card-body">
                   <h5 className="card-title">{plan.destination}</h5>
                   <p>{plan.trip_start_date}</p>
+                  <Link to={`/plan/${plan.id}/edit`} className="btn btn-primary">
+                    Edit
+                  </Link>
                 </div>
               </div>
             ))}
