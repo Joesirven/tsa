@@ -8,9 +8,10 @@ function JournalCreate() {
         rating: '',
         date: '',
     })
+
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const journalUrl = 'http://localhost:8000/journal'
+        const journalUrl = 'http://localhost:8000/journals'
         const fetchConfig = {
             method: 'POST',
             body: JSON.stringify(formData),
@@ -29,6 +30,7 @@ function JournalCreate() {
             })
         }
     }
+
     const handleFormChange = (e) => {
         const value = e.target.value
         const inputJournal = e.target.name
@@ -37,6 +39,7 @@ function JournalCreate() {
             [inputJournal]: value
         })
     }
+    
     return (
         <div className="row">
             <div className="offset-3 col-6">
