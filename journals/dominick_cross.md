@@ -26,6 +26,7 @@ Finished backend authentication.
 Started on plans list frontend.
 
 # 28 August
-Data displayed on plans list page
+Data displayed on plans list page.
 
 # 29 August
+Made form page for making a new plan but can't fully test until login is made. Started on edit plan page.
