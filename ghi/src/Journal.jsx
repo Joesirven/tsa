@@ -4,16 +4,22 @@ function JournalList() {
     const [getJournals, setJournal] = useState([])
     const getData = async () => {
         const journalUrl = 'http://localhost:8000/journals'
-        const response = await fetch(journalUrl)
-        
-        if (response.ok) {
-        const data = await response.json();
-        setJournal(data.journals)
-        }
+        try {
+            const response = await fetch(journalUrl)
+            if (response.ok) {
+                const data = await response.json();
+                setJournal(data.journals)
+                } else {
+                    console.error("Request error:", response.status)
+                }
+            } catch (e) {
+                console.error("An error occured with request:", e)
+        }    
     }
     useEffect(() => {
         getData()
     }, [])
+
         return (
         <div>
             <h1>Journals</h1>
