@@ -19,7 +19,7 @@ from jwtdown_fastapi.authentication import Token
 from authenticator import authenticator
 from pydantic import BaseModel
 
-class UserFrom(BaseModel):
+class UserForm(BaseModel):
   username: str
   password: str
 
@@ -33,6 +33,18 @@ class HttpError(BaseModel):
 router = APIRouter()
 
 
+@router.get("/token", response_model=UserToken | None)
+async def get_token(
+    request: Request,
+    user: UserOut = Depends(authenticator.try_get_current_account_data)
+) -> UserToken | None:
+    if user and authenticator.cookie_name in request.cookies:
+        return {
+            "access_token": request.cookies[authenticator.cookie_name],
+            "type": "Bearer",
+            "user": user,
+        }
+
 
 @router.post("/user/sign-up", response_model=UserToken | HttpError)
 async def create_user(
@@ -41,7 +53,7 @@ async def create_user(
   response: Response,
   repo: UserRepository = Depends()
 ):
-  print("hit function")
+
   hashed_password = authenticator.hash_password(info.password)
   print(f"lable {hashed_password}")
   try:
@@ -52,15 +64,18 @@ async def create_user(
       status_code = status.HTTP_400_BAD_REQUEST,
       detail = "Cannot create a new user with these credentials"
     )
-  form = UserFrom(username=info.email, password=info.password)
+  form = UserForm(username=info.email, password=info.password)
+  print("hit UserForm")
   token = await authenticator.login(response, request, form, repo)
+  print("hit token")
+  print(user)
   return UserToken(user=user, **token.dict())
 
 
 @router.get("/users", response_model=List[UserOutWithPassword])
 def get_all(
   repo: UserRepository = Depends(),
-  user_data: dict = Depends(authenticator.get_current_account_data),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ):
   return repo.get_all()
 
@@ -69,7 +84,7 @@ def update_user(
   user_id: int,
   user: UserIn,
   repo: UserRepository = Depends(),
-  user_data: dict = Depends(authenticator.get_current_account_data),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> Union[Error, UserOut]:
   return repo.update(user_id, user)
 
@@ -77,7 +92,7 @@ def update_user(
 def delete_user(
   user_id: int,
   repo: UserRepository = Depends(),
-  user_data: dict = Depends(authenticator.get_current_account_data),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> bool:
   return repo.delete(user_id)
 
@@ -86,7 +101,7 @@ def get_one_user(
   user_email: str,
   response: Response,
   repo: UserRepository = Depends(),
-  user_data: dict = Depends(authenticator.get_current_account_data),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> UserOut:
   user =repo.get_one(user_email)
   if user is None:
