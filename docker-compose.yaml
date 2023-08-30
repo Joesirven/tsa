@@ -18,7 +18,6 @@ services:
       - 8000:8000
     volumes:
       - ./api:/app
-
   ghi:
     image: node:lts-bullseye
     command: /bin/bash run.sh
@@ -28,6 +27,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      SIGNING_KEY: f2e06ef93a89cc71baba7f64144cea78ef8f85e128dab73acd4f1ed707793b10
       HOST_OS: ${OS}
       NODE_ENV: development
       HOST: "0.0.0.0"
@@ -38,6 +38,7 @@ services:
     volumes:
       - tsa:/var/lib/postgresql/db
     environment:
+      SIGNING_KEY: f2e06ef93a89cc71baba7f64144cea78ef8f85e128dab73acd4f1ed707793b10
       POSTGRES_PASSWORD: tsa
       POSTGRES_USER: tsa
       POSTGRES_DB: tsa
