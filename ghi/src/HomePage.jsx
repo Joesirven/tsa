@@ -1,10 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import TopDestinations from "./TopDestinations";
 
 function HomePage() {
   return (
-    <div>
-      <h1>Home Page Place Holder</h1>
+    <div className="home-page">
+      <h1>Travel Saver App</h1>
+      <h2>Yes, you can take that trip you've always dreamed of.</h2>
+      <TopDestinations />
       <Link to="plans">Plan List</Link>
     </div>
   );

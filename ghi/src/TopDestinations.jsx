@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { FetchWrapper } from './fetch-wrapper';
 
+const apiKey = import.meta.env.VITE_REACT_APP_TRIP_ADVISOR_API_KEY;
+const apiUrl = import.meta.env.VITE_TRIP_ADVISOR_API_URL;
+
+
 function TopDestinations() {
     const [destinations, setDestinations] = useState([]);
     const [query, setQuery] = useState('Top Destinations');
 
-    const TripAdvisorAPI = new FetchWrapper('TRIP_ADVISOR_API_URL');
+    const TripAdvisorAPI = new FetchWrapper(apiUrl);
     const fetchDestinations = async () => {
         try {
-            const response = await TripAdvisorAPI.get(`location/search?key=${REACT_APP_TRIP_ADVISOR_API_KEY}&searchQuery=${query}&language=en`);
+            const response = await TripAdvisorAPI.get(`location/search?key=${apiKey}&searchQuery=${query}&language=en`);
 
             const destinationsWithImages = await Promise.all(
                 response.data.map(async destination => {
-                    const imgResponse = await TripAdvisorAPI.get(`location/${destination.location_id}/photos?key=${REACT_APP_TRIP_ADVISOR_API_KEY}&language=en`);
-          destination.image_url = imgResponse.data[0]?.images?.thumbnail?.url || '';  // Use the thumbnail image or default to an empty string
-          return destination;
+                    const imgResponse = await TripAdvisorAPI.get(`location/${destination.location_id}/photos?key=${apiKey}&language=en`);
+          destination.image_url = imgResponse.data[0]?.images?.thumbnail?.url || '';
         })
-        } catch (error) {
-            console.error(error);
-        }
+        );
+        setDestinations(destinationsWithImages);
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 useEffect(() => {
@@ -36,7 +41,7 @@ return (
             <div className="destination-card" key={destination.id}>
                 <img src={destination.image_url} alt={destination.name} />
                 <h3>{destination.name}</h3>
-                <p>{destination.description}</p>
+                <p>{destination.address_obj?.address_string || ''}</p>
             </div>
             ))}
         </div>
