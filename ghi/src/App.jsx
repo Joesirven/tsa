@@ -20,24 +20,26 @@ function App() {
   const baseUrl = "http://localhost:8000"
 
   return (
-    <AuthProvider baseUrl={baseUrl}>
+    <div className="container">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Signup" element={<SignupForm />} />
-          <Route path="/Login" element={<LoginForm />} />
-          <Route path="/plans" element={<PlanList />} />
-          {/* <Route path="/plan/{id}" element={<PlanDetail />} />
-          <Route path="/plan/create" element={<PlanCreate />} />
-          <Route path="/plan{id}/edit" element={<PlanEdit />} />
-          <Route path="/journal" element={<Journal />} />
-          <Route path="/journal/{id}" element={<JournalDetail />} />
-          <Route path="/journal/create" element={<JournalCreate />} />
-          <Route path="/journal/{id}/edit" element={<JournalEdit />} />
-          <Route path="/expense/create" element={<ExpenseCreate />} /> */}
-        </Routes>
+        <AuthProvider baseUrl={baseUrl}>
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/Signup" element={<SignupForm />}></Route>
+            <Route path="/Login" element={<LoginForm />}></Route>
+            <Route path="/plans" element={<PlanList />}></Route>
+            {/* <Route path="/plan/{id}" element={<PlanDetail />}></Route>
+            <Route path="/plan/create" element={<PlanCreate />}></Route>
+            <Route path="/plan{id}/edit" element={<PlanEdit />}></Route>
+            <Route path="/journal" element={<Journal />}></Route>
+            <Route path="/journal/{id}" element={<JournalDetail />}></Route>
+            <Route path="/journal/create" element={<JournalCreate />}></Route>
+            <Route path="/journal/{id}/edit" element={<JournalEdit />}></Route>
+            <Route path="/expense/create" element={<ExpenseCreate />}></Route> */}
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
-    </AuthProvider>
+    </div>
   );
 }
 
