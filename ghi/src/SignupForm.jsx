@@ -13,16 +13,18 @@ const SignupForm = () => {
 
   const handleRegistration = (e) => {
     e.preventDefault();
+    console.log(process.env.VITE_REACT_APP_API_HOST);
     const accountData = {
       email: email,
       username: email,
       password: password,
-      first: first,
-      last: last,
+      first_name: first,
+      last_name: last,
     };
     register(
       accountData,
-      `${process.env.REACT_APP_USER_SERVICE_API_HOST}/api/user`
+      `${process.env.VITE_REACT_APP_API_HOST}/user/sign-up`
+
     );
     e.target.reset();
     navigate("/");
@@ -58,7 +60,7 @@ const SignupForm = () => {
           <div className="mb-3">
             <label className="form-label">first</label>
             <input
-              name="first"
+              name="first_name"
               type="text"
               className="form-control"
               onChange={(e) => {
@@ -69,7 +71,7 @@ const SignupForm = () => {
           <div className="mb-3">
             <label className="form-label">last</label>
             <input
-              name="last"
+              name="last_name"
               type="text"
               className="form-control"
               onChange={(e) => {
