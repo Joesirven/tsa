@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
-import Home from "./home";
+import HomePage from "./HomePage";
 import PlanList from "./PlansList";
 // import Login from "./Login";
 // import Logout from "./Logout";
@@ -18,7 +18,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<HomePage />} />
         {/* <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} /> */}
         <Route path="/plans" element={<PlanList />} />

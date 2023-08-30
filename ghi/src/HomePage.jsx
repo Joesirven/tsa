@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function home() {
+function HomePage() {
   return (
     <div>
       <h1>Home Page Place Holder</h1>
@@ -9,3 +9,5 @@ export default function home() {
     </div>
   );
 }
+
+export default HomePage;
