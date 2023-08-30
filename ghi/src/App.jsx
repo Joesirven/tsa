@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { AuthProvider } from '@galvanize-inc/jwtdown-for-react'
-import LoginForm from './LoginForm'
-import SignupForm from './SignupForm'
+import { AuthProvider } from '@galvanize-inc/jwtdown-for-react';
+import LoginForm from './LoginForm';
+import SignupForm from './SignupForm';
 import Home from "./home";
 import PlanList from "./PlansList";
 // import Login from "./Login";
@@ -42,25 +42,3 @@ function App() {
 }
 
 export default App;
-
-
-// import './App.css'
-// import { AuthProvider } from '@galvanize-inc/jwtdown-for-react'
-// import LoginForm from './LoginForm'
-// import SignupForm from './SignupForm'
-// import { Sign } from "crypto";
-
-// function App() {
-//   const baseUrl = "http://localhost:8000"
-
-//   return (
-//     <>
-//       <AuthProvider baseUrl={baseUrl}>
-//         <SignupForm />
-//         <LoginForm />
-//       </AuthProvider>
-//     </>
-//  )
-// }
-
-// export default App
