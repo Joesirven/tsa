@@ -4,7 +4,7 @@ volumes:
 services:
   fastapi:
     environment:
-      SIGNING_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      SIGNING_KEY: f2e06ef93a89cc71baba7f64144cea78ef8f85e128dab73acd4f1ed707793b10
       CORS_HOST: http://localhost:3000
       DATABASE_URL: postgresql://tsa:tsa@db/tsa
       WAIT_HOSTS: db:5432
