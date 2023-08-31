@@ -4,7 +4,7 @@ volumes:
 services:
   fastapi:
     environment:
-      SIGNING_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      SIGNING_KEY: ${SIGNING_KEY}
       CORS_HOST: http://localhost:3000
       DATABASE_URL: postgresql://tsa:tsa@db/tsa
       WAIT_HOSTS: db:5432
@@ -18,7 +18,6 @@ services:
       - 8000:8000
     volumes:
       - ./api:/app
-
   ghi:
     image: node:lts-bullseye
     command: /bin/bash run.sh
@@ -28,19 +27,21 @@ services:
     ports:
       - "3000:3000"
     environment:
+      SIGNING_KEY: ${SIGNING_KEY}
       HOST_OS: ${OS}
       NODE_ENV: development
       HOST: "0.0.0.0"
       PUBLIC_URL: http://localhost:3000
-      REACT_APP_API_HOST: ${REACT_APP_API_HOST}
-      REACT_APP_TRIP_ADVISOR_API_KEY: ${REACT_APP_TRIP_ADVISOR_API_KEY}
-      REACT_APP_GOOGLE_MAPS_API_KEY: ${REACT_APP_GOOGLE_MAPS_API_KEY}
-      TRIP_ADVISOR_API_URL: ${TRIP_ADVISOR_API_URL}
+      VITE_REACT_APP_API_HOST: ${VITE_REACT_APP_API_HOST}
+      VITE_REACT_APP_TRIP_ADVISOR_API_KEY: ${VITE_REACT_APP_TRIP_ADVISOR_API_KEY}
+      VITE_REACT_APP_GOOGLE_MAPS_API_KEY: ${VITE_REACT_APP_GOOGLE_MAPS_API_KEY}
+      VITE_TRIP_ADVISOR_API_URL: ${VITE_TRIP_ADVISOR_API_URL}
   db:
     image: postgres:14.5-bullseye
     volumes:
       - tsa:/var/lib/postgresql/db
     environment:
+      SIGNING_KEY: ${SIGNING_KEY}
       POSTGRES_PASSWORD: tsa
       POSTGRES_USER: tsa
       POSTGRES_DB: tsa
