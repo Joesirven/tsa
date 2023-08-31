@@ -5,6 +5,7 @@ import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import HomePage from "./HomePage";
 import PlanList from "./PlansList";
+import Nav from "./Nav";
 // import Login from "./Login";
 // import Logout from "./Logout";
 // import PlanDetail from "./PlanDetail";
@@ -21,20 +22,22 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} /> */}
-        <Route path="/plans" element={<PlanList />} />
-        {/* <Route path="/plan/{id}" element={<PlanDetail />} />
-        <Route path="/plan/create" element={<PlanCreate />} />
-        <Route path="/plan{id}/edit" element={<PlanEdit />} />
-        <Route path="/journal" element={<Journal />} />
-        <Route path="/journal/{id}" element={<JournalDetail />} />
-        <Route path="/journal/create" element={<JournalCreate />} />
-        <Route path="/journal/{id}/edit" element={<JournalEdit />} />
-        <Route path="/expense/create" element={<ExpenseCreate />} /> */}
-      </Routes>
+        <Nav />
+          <div className="container"></div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/plans" element={<PlanList />} />
+          {/* <Route path="/plan/{id}" element={<PlanDetail />} />
+          <Route path="/plan/create" element={<PlanCreate />} />
+          <Route path="/plan{id}/edit" element={<PlanEdit />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/journal/{id}" element={<JournalDetail />} />
+          <Route path="/journal/create" element={<JournalCreate />} />
+          <Route path="/journal/{id}/edit" element={<JournalEdit />} />
+          <Route path="/expense/create" element={<ExpenseCreate />} /> */}
+        </Routes>
     </BrowserRouter>
   );
 }

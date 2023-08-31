@@ -13,7 +13,7 @@ function TopDestinations() {
     const fetchDestinations = async () => {
         try {
             const response = await TripAdvisorAPI.get(`location/search?key=${apiKey}&searchQuery=${query}&language=en`);
-
+            print(response.data)
             const destinationsWithImages = await Promise.all(
                 response.data.map(async destination => {
                     const imgResponse = await TripAdvisorAPI.get(`location/${destination.location_id}/photos?key=${apiKey}&language=en`);
