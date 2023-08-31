@@ -30,3 +30,6 @@ Data displayed on plans list page.
 
 # 29 August
 Made form page for making a new plan but can't fully test until login is made. Started on edit plan page.
+
+# 30 August
+We set up frontend authentication

@@ -8,6 +8,9 @@ export default function HomePage() {
       <div className="container">
         <Link to="/Login">Login</Link>
         <Link to="/Signup">Signup</Link>
+        <Link to="/plans">PlanList</Link>
+        <Link to="/plan/create">PlanCreate</Link>
+        <Link to="/plan{id}/edit">PlanEdit</Link>
       </div>
     </div>
   );
