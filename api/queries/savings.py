@@ -8,6 +8,7 @@ class SavingsIn(BaseModel):
   current_amount_saved: Decimal
   final_goal_amount: Decimal
   if_saved: bool
+  plans_id: int
 
 
 class SavingsOut(BaseModel):
@@ -15,6 +16,7 @@ class SavingsOut(BaseModel):
   current_amount_saved: Decimal
   final_goal_amount: Decimal
   if_saved: bool
+  plans_id: int
 
 
 class Error(BaseModel):
@@ -28,7 +30,7 @@ class SavingsRepository:
         with conn.cursor() as db:
           result = db.execute(
             """
-              SELECT id, current_amount_saved, final_goal_amount, if_saved
+              SELECT id, plans_id, current_amount_saved, final_goal_amount, if_saved
               FROM savings
               WHERE id = %s
             """,
@@ -69,12 +71,14 @@ class SavingsRepository:
           db.execute(
             """
               UPDATE savings
-              SET current_amount_saved = %s,
+              SET plans_id = %s,
+                  current_amount_saved = %s,
                   final_goal_amount = %s,
                   if_saved = %s
               WHERE id = %s
             """,
             [
+              savings.plans_id,
               savings.current_amount_saved,
               savings.final_goal_amount,
               savings.if_saved,
@@ -92,16 +96,17 @@ class SavingsRepository:
         with conn.cursor() as db:
           db.execute(
             """
-              SELECT id, current_amount_saved, final_goal_amount, if_saved
+              SELECT id, plans_id, current_amount_saved, final_goal_amount, if_saved
               FROM savings
             """
           )
           return [
             SavingsOut(
               id=record[0],
-              current_amount_saved=record[1],
-              final_goal_amount=record[2],
-              if_saved=record[3]
+              plans_id=record[1],
+              current_amount_saved=record[2],
+              final_goal_amount=record[3],
+              if_saved=record[4]
             )
             for record in db
           ]
@@ -117,15 +122,17 @@ class SavingsRepository:
             """
             INSERT INTO savings
               (
+                plans_id,
                 current_amount_saved,
                 final_goal_amount,
                 if_saved
               )
             VALUES
-              (%s, %s, %s)
+              (%s, %s, %s, %s)
             RETURNING id;
             """,
             [
+            savings.plans_id,
             savings.current_amount_saved,
             savings.final_goal_amount,
             savings.if_saved
@@ -144,7 +151,8 @@ class SavingsRepository:
   def record_to_savings_out(self, record):
     return SavingsOut(
       id=record[0],
-      current_amount_saved=record[1],
-      final_goal_amount=record[2],
-      if_saved=record[3]
+      plans_id=record[1],
+      current_amount_saved=record[2],
+      final_goal_amount=record[3],
+      if_saved=record[4]
     )
