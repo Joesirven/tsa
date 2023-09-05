@@ -15,10 +15,10 @@ router = APIRouter()
 @router.post("/plans/create", response_model=Union[PlansOut, Error])
 async def create_plan(
   plan: PlansIn,
-  response: Response,
   repo: PlansRepository = Depends(),
   user_data: dict = Depends(authenticator.get_current_account_data),
 ):
+  print (plan)
   return repo.create(plan)
 
 

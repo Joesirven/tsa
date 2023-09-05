@@ -7,13 +7,21 @@ const apiUrl = import.meta.env.VITE_TRIP_ADVISOR_API_URL;
 
 function TopDestinations() {
     const [destinations, setDestinations] = useState([]);
-    const [query, setQuery] = useState('Top Destinations');
+    const [query, setQuery] = useState('Top%20Destinations');
 
     const TripAdvisorAPI = new FetchWrapper(apiUrl);
     const fetchDestinations = async () => {
         try {
-            const response = await TripAdvisorAPI.get(`location/search?key=${apiKey}&searchQuery=${query}&language=en`);
-            print(response.data)
+
+            const options = {method: 'GET', headers: {accept: 'application/json'}, mode: 'no-cors',};
+            // const response = await TripAdvisorAPI.get(`location/search?key=${apiKey}&searchQuery=${query}&language=en`, options);
+            const url = 'https://api.content.tripadvisor.com/api/v1/location/search?key=33C0B234F7EF4430BC66021940821F3B&searchQuery=Top%20Destinations&language=en';
+            let response = {}
+            fetch(url, options)
+                .then(res => res.json())
+                .then(json => response = json)
+                .catch(err => console.error('error:' + err));
+            console.log(response)
             const destinationsWithImages = await Promise.all(
                 response.data.map(async destination => {
                     const imgResponse = await TripAdvisorAPI.get(`location/${destination.location_id}/photos?key=${apiKey}&language=en`);

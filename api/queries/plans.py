@@ -31,7 +31,7 @@ class PlansOut(BaseModel):
 
 
 class PlansRepository:
-  async def get_one(
+  def get_one(
     self,
     plan_id:int,
     user_data: dict = Depends(authenticator.get_current_account_data),
@@ -64,7 +64,7 @@ class PlansRepository:
       return {"message": e}
 
 
-  async def delete(
+  def delete(
     self,
     plan_id: int,
     user_data: dict = Depends(authenticator.get_current_account_data),
@@ -85,7 +85,7 @@ class PlansRepository:
         return False
 
 
-  async def update(
+  def update(
     self,
     plan_id: int,
     plan: PlansIn,
@@ -163,17 +163,15 @@ class PlansRepository:
       print(e)
       return {"message": "Could not get all plans."}
 
-  async def create(
+  def create(
     self,
     plan: PlansIn,
-    user_data: dict = Depends(authenticator.get_current_account_data),
   ) -> PlansOut:
+    print(f"we hit create in plans.py")
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
-        # Run our INSERT statement
+          print(f"we hit db.execute this is plan: {plan}")
           result = db.execute(
             """
             INSERT INTO plans
@@ -199,15 +197,17 @@ class PlansRepository:
             ]
           )
           id = result.fetchone()[0]
+          print(f"this is result: {result}")
           # old_data = plan.dict()
           # return PlansOut(id=id, **old_data)
           return self.plan_in_to_out(id, plan)
     except Exception as e:
-      print(e)
+      print(f"Exception in create: {e}")
       return {"message": "Could not create plan."}
 
   def plan_in_to_out(self, id: int, plan: PlansIn):
     old_data = plan.dict()
+    print(f"this is old data: {old_data}")
     return PlansOut(id=id, **old_data)
 
   def record_to_plan_out(self, record):

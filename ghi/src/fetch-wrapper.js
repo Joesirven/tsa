@@ -3,13 +3,17 @@ export class FetchWrapper {
         this.baseURL = baseURL;
     }
 
-    async get(endpoint) {
+    async get(endpoint, options = {}) {
         try {
-            const response = await fetch(this.baseURL + endpoint)
+
+            const response = await fetch(this.baseURL + endpoint, options)
+            const data = await response.json()
+            console.log("this is data:", data)
             if (response.ok) {
                 const data = await response.json()
                 return data
             } else {
+                console.log(response)
                 throw new Error('Response not "OK"')
             }
         } catch (error) {
