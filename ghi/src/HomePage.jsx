@@ -12,6 +12,7 @@ export default function HomePage() {
         <Link to="/plan/create">PlanCreate</Link>
         <Link to="/plan{id}/edit">PlanEdit</Link>
         <Link to="/journal">Journal List</Link>
+        <Link to="/journal/{id}">Journal Detail</Link>
         <Link to="/journal/create">Journal Create</Link>
       </div>
     </div>

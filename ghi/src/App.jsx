@@ -11,7 +11,7 @@ import PlanList from "./PlansList";
 import PlanCreate from "./PlanCreate";
 import PlanEdit from "./PlanEdit";
 import Journal from "./Journal";
-// import JournalDetail from "./JournalDetail";
+import JournalDetail from "./JournalDetail";
 import JournalCreate from "./JournalCreate";
 // import JournalEdit from "./JournalEdit";
 // import ExpenseCreate from "./ExpenseCreate";
@@ -32,7 +32,7 @@ function App() {
             <Route path="/plan/create" element={<PlanCreate />}></Route>
             <Route path="/plan{id}/edit" element={<PlanEdit />}></Route>
             <Route path="/journal" element={<Journal />}></Route>
-            {/* <Route path="/journal/{id}" element={<JournalDetail />}></Route> */}
+            <Route path="/journal/{id}" element={<JournalDetail />}></Route>
             <Route path="/journal/create" element={<JournalCreate />}></Route>
             {/* <Route path="/journal/{id}/edit" element={<JournalEdit />}></Route> */}
             {/* <Route path="/expense/create" element={<ExpenseCreate />}></Route> */}
