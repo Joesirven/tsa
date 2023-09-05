@@ -47,4 +47,3 @@ services:
       POSTGRES_DB: tsa
     ports:
       - "15432:5432"
-
