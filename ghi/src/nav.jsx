@@ -4,7 +4,12 @@ import useToken from '@galvanize-inc/jwtdown-for-react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 function NavComponent() {
-  const { token } = useToken();
+  const { token, logout, fetchWithToken } = useToken();
+
+  function handleLogout() {
+    logout();
+    fetchWithToken('/logout');
+  }
 
   return (
     <Navbar bg="success" expand="lg">
@@ -22,9 +27,9 @@ function NavComponent() {
               </NavDropdown>
               <NavDropdown title="Journal" id="basic-nav-dropdown">
                 <NavDropdown.Item as={NavLink} to="/journal">My Journal</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/journal/create">Add Manufacturer</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/journal/create">New Entry</NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link as={NavLink} to="/logout">Log Out</Nav.Link>
+              <Nav.Link as={NavLink} onClick={handleLogout}>Log Out</Nav.Link>
             </>
           ) : (
             <>
