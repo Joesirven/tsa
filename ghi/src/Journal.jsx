@@ -2,27 +2,18 @@ import {useEffect, useState} from "react"
 import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
 
 
-function SomeComponent() {
-  const { token } = useAuthContext();
-}
-
-const request = await fetch(url, {
-  headers: { Authorization: `Bearer ${token}` },
-  // Other fetch options, like method and body, if applicable
-});
-
-
 function JournalList() {
-    const [getJournals, setJournal] = useState([])
+    const [journals, setJournals] = useState([])
+    const {token} = useAuthContext
     const getData = async () => {
         const journalUrl = 'http://localhost:8000/journals'
         try {
-            const response = await fetch(journalUrl)
-            console.log(response)
+            const response = await fetch(journalUrl, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             if (response.ok) {
                 const data = await response.json();
-                console.log(data)
-                setJournal(data.journals)
+                setJournals(data.journals)
                 } else {
                     console.error("Request error:", response.status)
                 }
@@ -48,14 +39,14 @@ function JournalList() {
                 </tr>
                 </thead>
                 <tbody>
-                {getJournals.map(journals => {
+                {journals.map(journal => {
                     return (
-                    <tr key={journals.id}>
-                        <td>{journals.location}</td>
-                        <td>{journals.picture_url}</td>
-                        <td>{journals.description}</td>
-                        <td>{journals.rating}</td>
-                        <td>{journals.date}</td>
+                    <tr key={journal.id}>
+                        <td>{journal.location}</td>
+                        <td>{journal.picture_url}</td>
+                        <td>{journal.description}</td>
+                        <td>{journal.rating}</td>
+                        <td>{journal.date}</td>
                     </tr>
                     );
                 })}
