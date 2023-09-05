@@ -1,6 +1,8 @@
-import {useState} from "react"
+import { useState, useEffect } from "react";
+import { useAuthContext } from "@galvanize-inc/jwtdown-for-react"
 
 function JournalCreate() {
+    const { token } = useAuthContext();
     const [formData, setFormData] = useState({
         location: '',
         picture_url: '',
@@ -8,10 +10,11 @@ function JournalCreate() {
         rating: '',
         date: '',
     })
-
+    const [isLoading, setIsLoading] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const journalUrl = 'http://localhost:8000/journals'
+        setIsLoading(true);
+        const journalUrl = "http://localhost:8000/journal/create";
         const fetchConfig = {
             method: 'POST',
             body: JSON.stringify(formData),
@@ -19,18 +22,29 @@ function JournalCreate() {
                 "Content-Type": 'application/json',
             },
         }
-        const response = await fetch(journalUrl, fetchConfig)
-        if (response.ok) {
-            setFormData({
-                location: '',
-                picture_url: '',
-                description: '',
-                rating: '',
-                date: '',
-            })
+
+        try {
+            const response = await fetch(journalUrl, fetchConfig)
+            if (!response.ok) {
+                console.error("Request error:", response.status);
+            } else {
+                console.log("succes")
+            }
+        } catch(e){
+
+        } finally {
+            setIsLoading(false)
         }
     }
 
+    useEffect(() => {
+    if (token) {
+        setFormData((prevData) => ({
+        ...prevData,
+        }));
+    }
+    }, [token]);
+    
     const handleFormChange = (e) => {
         const value = e.target.value
         const inputJournal = e.target.name
@@ -66,7 +80,9 @@ function JournalCreate() {
                             <input onChange={handleFormChange} value={formData.date} placeholder="Enter date" required type="date" name="date" id="date" className="form-control" />
                             <label htmlFor="date">Date</label>
                         </div>
-                        <button className="btn btn-primary">Create New Journal</button>
+                        <button className="btn btn-primary" disabled={isLoading}>
+                            {isLoading ? "Creating ..." : "Create New Journal"} 
+                        </button>
                     </form>
                 </div>
             </div>
