@@ -4,7 +4,8 @@ import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
 
 function JournalList() {
     const [journals, setJournals] = useState([])
-    const {token} = useAuthContext
+    const {token} = useAuthContext()
+
     const getData = async () => {
         const journalUrl = 'http://localhost:8000/journals'
         try {
@@ -14,11 +15,11 @@ function JournalList() {
             if (response.ok) {
                 const data = await response.json();
                 setJournals(data.journals)
-                } else {
-                    console.error("Request error:", response.status)
-                }
-            } catch (e) {
-                console.error("An error occured with request:", e)
+            } else {
+                console.error("Request error:", response.status)
+            }
+        } catch (e) {
+            console.error("An error occured with request:", e)
         }    
     }
     useEffect(() => {
