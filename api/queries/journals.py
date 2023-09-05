@@ -154,10 +154,11 @@ class JournalRepository:
               picture_url,
               description,
               rating,
-              date
+              date,
+              users_id
               )
             VALUES
-              (%s, %s, %s, %s, %s)
+              (%s, %s, %s, %s, %s, %s)
             RETURNING id;
             """,
             [
@@ -166,6 +167,7 @@ class JournalRepository:
             journal.description,
             journal.rating,
             journal.date,
+            journal.users_id
             ]
           )
           id = result.fetchone()[0]
