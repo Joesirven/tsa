@@ -31,10 +31,10 @@ class PlansOut(BaseModel):
 
 
 class PlansRepository:
-  async def get_one(
+  def get_one(
     self,
-    plan_id:int,
-    user_data: dict = Depends(authenticator.get_current_account_data),
+    plan_id:int
+    # user_data: dict = Depends(authenticator.get_current_account_data),
     ) -> Optional[PlansOut]:
     try:
       with pool.connection() as conn:
@@ -64,10 +64,10 @@ class PlansRepository:
       return {"message": e}
 
 
-  async def delete(
+  def delete(
     self,
-    plan_id: int,
-    user_data: dict = Depends(authenticator.get_current_account_data),
+    plan_id: int
+    # user_data: dict = Depends(authenticator.get_current_account_data),
     ) -> bool:
     try:
       with pool.connection() as conn:
@@ -85,11 +85,11 @@ class PlansRepository:
         return False
 
 
-  async def update(
+  def update(
     self,
     plan_id: int,
-    plan: PlansIn,
-    user_data: dict = Depends(authenticator.get_current_account_data),
+    plan: PlansIn
+    # user_data: dict = Depends(authenticator.get_current_account_data),
     ) -> Union[Error, PlansOut]:
     try:
       #connect the databse
@@ -130,8 +130,8 @@ class PlansRepository:
 
 
   def get_all(
-    self,
-    user_data: dict = Depends(authenticator.get_current_account_data),
+    self
+    # user_data: dict = Depends(authenticator.get_current_account_data),
   ) -> Union[Error, List[PlansOut]]:
     try:
       #connect the databse
@@ -163,11 +163,11 @@ class PlansRepository:
       print(e)
       return {"message": "Could not get all plans."}
 
-  async def create(
+  def create(
     self,
-    plan: PlansIn,
-    user_data: dict = Depends(authenticator.get_current_account_data),
-  ) -> PlansOut:
+    plan: PlansIn
+    # user_data: dict = Depends(authenticator.get_current_account_data),
+  ) -> Union[PlansOut, Error]:
     try:
       #connect the databse
       with pool.connection() as conn:
@@ -183,10 +183,11 @@ class PlansRepository:
               trip_start_date,
               trip_end_date,
               destination,
-              monthly_budget
+              monthly_budget,
+              users_id
               )
             VALUES
-              (%s, %s, %s, %s, %s, %s)
+              (%s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
             """,
             [
@@ -196,9 +197,11 @@ class PlansRepository:
             plan.trip_end_date,
             plan.destination,
             plan.monthly_budget,
+            plan.users_id,
             ]
           )
           id = result.fetchone()[0]
+          print(f"result in db: {result}")
           # old_data = plan.dict()
           # return PlansOut(id=id, **old_data)
           return self.plan_in_to_out(id, plan)
