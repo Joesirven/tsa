@@ -1,4 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
+
 
 class PlanList extends React.Component {
   constructor(props) {
@@ -7,10 +10,12 @@ class PlanList extends React.Component {
       plans: [],
     };
   }
-
+  
   async componentDidMount() {
     const URL = "http://localhost:8000/plans";
-    const response = await fetch(URL);
+    const response = await fetch(URL, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (response.ok) {
       const data = await response.json();
       this.setState({ plans: data });
@@ -18,13 +23,15 @@ class PlanList extends React.Component {
   }
 
   render() {
-    // const sortedPlans = this.state.plans.slice().sort((a, b) => a.trip_start_date.localeCompare(b.trip_start_date));
-    // const earliestPlan = sortedPlans.shift();
-    // const otherPlans = sortedPlans;
-    // console.log("Sorted Plans:", sortedPlans);
-    // console.log("Earliest Plan:", earliestPlan);
-    // console.log("Other Plans:", otherPlans);
+    const { plans } = this.state;
+    let earliestPlan = null;
+    let otherPlans = [];
 
+    if (plans.length > 0) {
+      const sortedPlans = plans.slice().sort((a, b) => a.trip_start_date.localeCompare(b.trip_start_date));
+      earliestPlan = sortedPlans.shift();
+      otherPlans = sortedPlans;
+    }
     return (
       <div className="shadow p-4 mt-4">
         <h1
@@ -36,78 +43,32 @@ class PlanList extends React.Component {
         >
           Plans
         </h1>
-        {/* <div style={{ display: "flex" }}>
+        <div style={{ display: "flex" }}>
           <div style={{ flex: 1 }}>
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Earliest Plan</h5>
-                <p>{earliestPlan.destination}</p>
-                <p>{earliestPlan.trip_start_date}</p>
+            {earliestPlan && (
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">Current Plan</h5>
+                  <p>{earliestPlan.destination}</p>
+                  <p>{earliestPlan.trip_start_date}</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-          <div style={{ flex: 1, marginLeft: "20px" }}>
+          <div style={{ flex: 3, marginLeft: "20px", display: "flex", flexWrap: "wrap" }}>
             {otherPlans.map((plan) => (
-              <div key={plan.id} className="card mb-3">
+              <div key={plan.id} className="card mb-2" style={{ flexBasis: "30%", margin: "0 10px"}}>
                 <div className="card-body">
                   <h5 className="card-title">{plan.destination}</h5>
                   <p>{plan.trip_start_date}</p>
+                  <Link to={`/plan/${plan.id}/edit`} className="btn btn-primary">
+                    Edit
+                  </Link>
                 </div>
               </div>
             ))}
           </div>
-        </div> */}
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th
-                style={{ borderBottom: "1px solid black", textAlign: "left" }}
-              >
-                start_of_budget
-              </th>
-              <th
-                style={{ borderBottom: "1px solid black", textAlign: "left" }}
-              >
-                end_of_budget
-              </th>
-              <th
-                style={{ borderBottom: "1px solid black", textAlign: "left" }}
-              >
-                trip_start_date
-              </th>
-              <th
-                style={{ borderBottom: "1px solid black", textAlign: "left" }}
-              >
-                trip_end_date
-              </th>
-              <th
-                style={{ borderBottom: "1px solid black", textAlign: "left" }}
-              >
-                destination
-              </th>
-              <th
-                style={{ borderBottom: "1px solid black", textAlign: "left" }}
-              >
-                monthly_budget
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.plans.map((plans) => {
-              console.log("Fetched Data:", plans);
-              return (
-                <tr key={plans.id}>
-                  <td>{plans.start_of_budget}</td>
-                  <td>{plans.end_of_budget}</td>
-                  <td>{plans.trip_start_date}</td>
-                  <td>{plans.trip_end_date}</td>
-                  <td>{plans.destination}</td>
-                  <td>{plans.monthly_budget}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        </div>
       </div>
     );
   }
