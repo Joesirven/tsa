@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
+
 
 class PlanList extends React.Component {
   constructor(props) {
@@ -8,10 +10,12 @@ class PlanList extends React.Component {
       plans: [],
     };
   }
-
+  
   async componentDidMount() {
     const URL = "http://localhost:8000/plans";
-    const response = await fetch(URL);
+    const response = await fetch(URL, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (response.ok) {
       const data = await response.json();
       this.setState({ plans: data });

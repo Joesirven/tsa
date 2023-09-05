@@ -17,7 +17,7 @@ async def create_plan(
   plan: PlansIn,
   response: Response,
   repo: PlansRepository = Depends(),
-  # user_data: dict = Depends(authenticator.get_current_account_data),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ):
   return repo.create(plan)
 
@@ -25,7 +25,7 @@ async def create_plan(
 @router.get("/plans", response_model=Union[Error, List[PlansOut]])
 async def get_all(
   repo: PlansRepository = Depends(),
-  # user_data: dict = Depends(authenticator.get_current_account_data),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ):
 
   return repo.get_all()
@@ -35,7 +35,7 @@ async def update_plan(
   plan_id: int,
   plan: PlansIn,
   repo: PlansRepository = Depends(),
-  # user_data: dict = Depends(authenticator.get_current_account_data),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> Union[Error, PlansOut]:
 
   return repo.update(plan_id, plan)
@@ -55,7 +55,7 @@ async def get_one_plan(
   plan_id: int,
   response: Response,
   repo: PlansRepository = Depends(),
-  # user_data: dict = Depends(authenticator.get_current_account_data),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> PlansOut:
   plan = repo.get_one(plan_id)
   if plan is None:

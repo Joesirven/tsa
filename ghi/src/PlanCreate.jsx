@@ -1,50 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
+
 
 const PlanCreate = () => {
-    const [formData, setFormData] = useState({
-        startOfBudget: "",
-        endOfBudget: "",
-        tripStartDate: "",
-        tripEndDate: "",
-        destination: "",
-        monthlyBudget: "",
-        // userId: userId,
-    });
+  const { token } = useAuthContext();
+  const { userId } = useContext(UserContext);
+  const [formData, setFormData] = useState({
+    startOfBudget: "",
+    endOfBudget: "",
+    tripStartDate: "",
+    tripEndDate: "",
+    destination: "",
+    monthlyBudget: "",
+    userId: userId,
+  });
 
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-        const url = "http://localhost:8000/plans/create";
-        const fetchConfig = {
-        method: "post",
-        body: JSON.stringify(formData),
-        headers: {
-            "Content-Type": "application/json",
-        },
-        };
-
-        try {
-        const response = await fetch(url, fetchConfig);
-        if (!response.ok) {
-
-        }
-        } catch (error) {
-
-        } finally {
-        setIsLoading(false);
-        }
+    const url = "http://localhost:8000/plans/create";
+    const fetchConfig = {
+    method: "post",
+    body: JSON.stringify(formData),
+    headers: {
+      "Content-Type": "application/json",
+    },
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
+    try {
+    const response = await fetch(url, fetchConfig);
+    if (!response.ok) {
+
+    }
+    } catch (error) {
+
+    } finally {
+    setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
-        }));
-    };
+        userId: decodedToken.userId,
+      }));
+    }
+  }, [token]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+    ...prevData,
+    [name]: value,
+    }));
+  };
 
   return (
     <div>

@@ -33,3 +33,8 @@ Made form page for making a new plan but can't fully test until login is made. S
 
 # 30 August
 We set up frontend authentication
+
+# 31 August
+Plans was not working so we debugged all day to find out they were all async and shouldn't have been.
+
+# 5 September
