@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
+import { useNavigate } from "react-router-dom";
 
 
 const PlanCreate = () => {
   const { token } = useAuthContext();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     start_of_budget: "",
     end_of_budget: "",
@@ -15,6 +17,7 @@ const PlanCreate = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,8 +34,9 @@ const PlanCreate = () => {
     };
     try {
       const response = await fetch(url, fetchConfig);
-      if (!response.ok) {
-
+      if (response.ok) {
+        setIsSubmitted(true);
+        navigate("/plans");
       }
     } catch (error) {
 
@@ -74,6 +78,7 @@ const PlanCreate = () => {
 
   return (
     <div>
+      {isSubmitted && <Redirect to="/plans" />}
       <h1>Create a New Plan</h1>
       <form onSubmit={handleSubmit}>
         <label>Start of Budget:</label>
@@ -126,7 +131,7 @@ const PlanCreate = () => {
           required
         />
         <button type="submit" disabled={isLoading}>
-            {isLoading ? "Submitting..." : "Submit"}
+          {isLoading ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>
