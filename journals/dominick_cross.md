@@ -38,3 +38,4 @@ We set up frontend authentication
 Plans was not working so we debugged all day to find out they were all async and shouldn't have been.
 
 # 5 September
+Creating a plan on the frontend is fully functional now

@@ -19,7 +19,7 @@ const LoginForm = () => {
       <div className="card-body">
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="mb-3">
-            <label className="form-label">Username:</label>
+            <label className="form-label">Email:</label>
             <input
               name="username"
               type="text"

@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
 
 
 const PlanCreate = () => {
   const { token } = useAuthContext();
-  const { userId } = useContext(UserContext);
   const [formData, setFormData] = useState({
-    startOfBudget: "",
-    endOfBudget: "",
-    tripStartDate: "",
-    tripEndDate: "",
+    start_of_budget: "",
+    end_of_budget: "",
+    trip_start_date: "",
+    trip_end_date: "",
     destination: "",
-    monthlyBudget: "",
-    userId: userId,
+    monthly_budget: "",
+    users_id: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -23,18 +22,18 @@ const PlanCreate = () => {
 
     const url = "http://localhost:8000/plans/create";
     const fetchConfig = {
-    method: "post",
-    body: JSON.stringify(formData),
-    headers: {
-      "Content-Type": "application/json",
-    },
+      method: "post",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     };
-
     try {
-    const response = await fetch(url, fetchConfig);
-    if (!response.ok) {
+      const response = await fetch(url, fetchConfig);
+      if (!response.ok) {
 
-    }
+      }
     } catch (error) {
 
     } finally {
@@ -42,21 +41,34 @@ const PlanCreate = () => {
     }
   };
 
+  const getUserIdFromToken = (token) => {
+    const tokenParts = token.split(".");
+    if (tokenParts.length === 3) {
+      const payload = JSON.parse(atob(tokenParts[1]));
+      const user_id = payload.account.id;
+      return user_id;
+    }
+    
+    return null;
+  };
+
   useEffect(() => {
     if (token) {
-      const decodedToken = jwtDecode(token);
-      setFormData((prevData) => ({
-        ...prevData,
-        userId: decodedToken.userId,
-      }));
+      const user_id = getUserIdFromToken(token);
+      if (user_id) {
+        setFormData((prevData) => ({
+          ...prevData,
+          users_id: user_id,
+        }));
+      }
     }
   }, [token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
-    ...prevData,
-    [name]: value,
+      ...prevData,
+      [name]: value,
     }));
   };
 
@@ -67,32 +79,32 @@ const PlanCreate = () => {
         <label>Start of Budget:</label>
         <input
           type="date"
-          name="startOfBudget"
-          value={formData.startOfBudget}
+          name="start_of_budget"
+          value={formData.start_of_budget}
           onChange={handleChange}
           required
         />
         <label>End of Budget:</label>
         <input
           type="date"
-          name="endOfBudget"
-          value={formData.endOfBudget}
+          name="end_of_budget"
+          value={formData.end_of_budget}
           onChange={handleChange}
           required
         />
         <label>Trip Start Date:</label>
         <input
           type="date"
-          name="tripStartDate"
-          value={formData.tripStartDate}
+          name="trip_start_date"
+          value={formData.trip_start_date}
           onChange={handleChange}
           required
         />
         <label>Trip End Date:</label>
         <input
           type="date"
-          name="tripEndDate"
-          value={formData.tripEndDate}
+          name="trip_end_date"
+          value={formData.trip_end_date}
           onChange={handleChange}
           required
         />
@@ -108,8 +120,8 @@ const PlanCreate = () => {
         <input
           type="number"
           step="0.01"
-          name="monthlyBudget"
-          value={formData.monthlyBudget}
+          name="monthly_budget"
+          value={formData.monthly_budget}
           onChange={handleChange}
           required
         />
