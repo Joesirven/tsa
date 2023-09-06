@@ -87,7 +87,7 @@ const PlanList = () => {
                   Trip Start: <div>{earliestPlan.trip_start_date}</div>
                 </div>
               </div>
-              <Link to={`/plan/${earliestPlan.id}`} className="btn btn-primary">
+              <Link to={`/plans/${earliestPlan.id}`} className="btn btn-primary">
                 Details
               </Link>
             </div>
