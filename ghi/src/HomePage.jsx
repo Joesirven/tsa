@@ -10,7 +10,6 @@ export default function HomePage() {
         <Link to="/Signup">Signup</Link>
         <Link to="/plans">PlanList</Link>
         <Link to="/plan/create">PlanCreate</Link>
-        <Link to="/plan{id}/edit">PlanEdit</Link>
       </div>
     </div>
   );
