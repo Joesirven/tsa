@@ -1,48 +1,94 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 import { useAuthContext } from "@galvanize-inc/jwtdown-for-react"
+import { useNavigate } from "react-router-dom"
+
 
 function JournalCreate() {
-    const { token } = useAuthContext();
+    const { token } = useAuthContext()
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         location: '',
         picture_url: '',
         description: '',
         rating: '',
         date: '',
+        users_id: '',
     })
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+    const [isSubmitted, setIsSubmitted] = useState(false)
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true);
-        const journalUrl = "http://localhost:8000/journal/create";
+        const journalUrl = "http://localhost:8000/journal/create"
+
+        if (!formData.location || !formData.description || !formData.date || !formData.rating) {
+            console.error("Please fill in all required fields.")
+            setIsLoading(false)
+            return
+        }
+
+
         const fetchConfig = {
             method: 'POST',
             body: JSON.stringify(formData),
             headers: {
                 "Content-Type": 'application/json',
+                Authorization: `Bearer ${token}`,
             },
         }
 
         try {
             const response = await fetch(journalUrl, fetchConfig)
             if (!response.ok) {
-                console.error("Request error:", response.status);
+                console.error("Request error:", response.status)
+                const errorMessage = await response.text()
+                console.error("Server Error:", errorMessage)
             } else {
+                setIsSubmitted(true)
+                setFormData({
+                    location: "",
+                    picture_url: "",
+                    description: "",
+                    rating: "",
+                    date: "",
+                });
+                navigate("/journal")
                 console.log("succes")
             }
         } catch(e){
+            console.error("Request Error", e)
 
         } finally {
             setIsLoading(false)
         }
     }
+    const getUserIdFromToken = (token) => {
+        const tokenParts = token.split(".");
+        if (tokenParts.length === 3) {
+        const payload = JSON.parse(atob(tokenParts[1]));
+        const user_id = payload.account.id;
+        return user_id;
+        }
+
+        return null;
+    };
+
 
     useEffect(() => {
-    if (token) {
-        setFormData((prevData) => ({
-        ...prevData,
-        }));
-    }
+        if (token) {
+            try {
+                const user_id = getUserIdFromToken(token)
+                if (user_id) {
+                    setFormData((prevData) => ({
+                    ...prevData,
+                    users_id: user_id,
+                    }));
+                }       
+            } catch (e) {
+                console.error("Request Error", e);
+            }
+        }
     }, [token]);
     
     const handleFormChange = (e) => {
@@ -56,6 +102,7 @@ function JournalCreate() {
     
     return (
         <div className="row">
+            {isSubmitted && <Redirect to="/journal" />}
             <div className="offset-3 col-6">
                 <div className="shadow p-4 mt-4">
                     <h1>Create a new journal entry</h1>
