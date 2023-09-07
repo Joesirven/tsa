@@ -1,41 +1,56 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from '@galvanize-inc/jwtdown-for-react';
+import useToken from "@galvanize-inc/jwtdown-for-react";
+import NavComponent from "./Nav";
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import HomePage from "./HomePage";
 import PlanList from "./PlansList";
-// import Login from "./Login";
-// import Logout from "./Logout";
 import PlanCreate from "./PlanCreate";
 import PlanEdit from "./PlanEdit";
-// import Journal from "./Journal";
+// import JournalList from "./Journal";
 // import JournalDetail from "./JournalDetail";
 // import JournalCreate from "./JournalCreate";
 // import JournalEdit from "./JournalEdit";
 // import ExpenseCreate from "./ExpenseCreate";
 import PlanDetail from "./PlanDetail";
 
+
 function App() {
   const baseUrl = "http://localhost:8000"
+  function ProtectedRoute({ children }) {
+    const { token } = useToken();
+    if (!token) {
+      return <Navigate to="/Login" replace />;
+    }
+    return <>{children}</>;
+  };
 
   return (
     <div className="container">
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
+          <NavComponent />
           <Routes>
             <Route path="/" element={<HomePage />}></Route>
             <Route path="/Signup" element={<SignupForm />}></Route>
             <Route path="/Login" element={<LoginForm />}></Route>
-            <Route path="/plans" element={<PlanList />}></Route>
-            <Route path="/plan/{id}" element={<PlanDetail />}></Route>
-            <Route path="/plan/create" element={<PlanCreate />}></Route>
-            <Route path="/plan{id}/edit" element={<PlanEdit />}></Route>
-            {/* <Route path="/journal" element={<Journal />}></Route>
-            <Route path="/journal/{id}" element={<JournalDetail />}></Route>
-            <Route path="/journal/create" element={<JournalCreate />}></Route>
-            <Route path="/journal/{id}/edit" element={<JournalEdit />}></Route>
-            <Route path="/expense/create" element={<ExpenseCreate />}></Route> */}
+            <Route path="/plans">
+              <Route index element={<ProtectedRoute><PlanList /></ProtectedRoute>} />
+              <Route path="create" element={<ProtectedRoute><PlanCreate /></ProtectedRoute>} />
+              <Route path=":id/edit" element={<ProtectedRoute><PlanEdit /></ProtectedRoute>} />
+              {/* <Route path=":id" element={<ProtectedRoute><PlanDetail /></ProtectedRoute>} /> */}
+            </Route>
+            {/* <Route path="/expense">
+              <Route path="create" element={<ProtectedRoute><ExpenseCreate /></ProtectedRoute>} />
+            </Route>
+            <Route path="journal">
+              <Route index element={<ProtectedRoute><JournalList /></ProtectedRoute>} />
+              <Route path=":id" element={<ProtectedRoute><JournalDetail /></ProtectedRoute>} />
+              <Route path="create" element={<ProtectedRoute><JournalCreate /></ProtectedRoute>} />
+              <Route path=":id/edit" element={<ProtectedRoute><JournalEdit /></ProtectedRoute>} />
+            </Route> */}
           </Routes>
         </AuthProvider>
       </BrowserRouter>
