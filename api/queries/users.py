@@ -187,6 +187,7 @@ class UserRepository:
     except Exception:
       raise DuplicateUserError()
 
+
   def user_in_to_out(self, id:int, user: UserIn):
     old_data = user.dict()
     return UserOut(id=id, **old_data)

@@ -54,20 +54,16 @@ async def create_user(
   repo: UserRepository = Depends()
 ):
   hashed_password = authenticator.hash_password(info.password)
-  print(f"lable {hashed_password}")
+
   try:
     user = repo.create(info, hashed_password)
-    print("finished creating user")
   except DuplicateUserError:
     return HTTPException(
       status_code = status.HTTP_400_BAD_REQUEST,
       detail = "Cannot create a new user with these credentials"
     )
   form = UserForm(username=info.email, password=info.password)
-  print("hit UserForm")
   token = await authenticator.login(response, request, form, repo)
-  print("hit token")
-  print(user)
   return UserToken(user=user, **token.dict())
 
 
