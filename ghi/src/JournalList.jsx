@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react"
 import { useAuthContext } from "@galvanize-inc/jwtdown-for-react"
 import { useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom"
 
 
 function JournalList() {
