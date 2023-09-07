@@ -9,13 +9,6 @@ import HomePage from "./HomePage";
 import PlanList from "./PlansList";
 import PlanCreate from "./PlanCreate";
 import PlanEdit from "./PlanEdit";
-// import JournalList from "./Journal";
-// import JournalDetail from "./JournalDetail";
-// import JournalCreate from "./JournalCreate";
-// import JournalEdit from "./JournalEdit";
-// import ExpenseCreate from "./ExpenseCreate";
-import PlanDetail from "./PlanDetail";
-
 
 function App() {
   const baseUrl = "http://localhost:8000"
