@@ -28,7 +28,6 @@ function JournalList() {
 
     const getData = async () => {
         setIsLoading(true)
-        const user_id = getUserIdFromToken(token)
         try {
             const journalUrl = 'http://localhost:8000/journals'
             const response = await fetch(journalUrl, {
