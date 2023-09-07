@@ -21,14 +21,13 @@ function JournalDetail() {
         setIsLoading(true)
         const user_id = getUserIdFromToken(token)
         try {
-            const journalUrl = `http://localhost:8000/journal/${id}?user_id=${user_id}`
+            const journalUrl = `http://localhost:8000/journal/${journal_id}`;
             const response = await fetch(journalUrl, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             if (response.ok) {
                 const data = await response.json()
-                const filteredJournal = data
-                setJournal(data.filteredJournal)
+                setJournal(data)
             } else {
                 console.error("Request error:", response.status)
             }
@@ -68,7 +67,7 @@ function JournalDetail() {
                         <td>{journal.rating}</td>
                         <td>{journal.date}</td>
                     </tr>
-                                        );
+                    );
                 })}
                 </tbody>
                 </table>
