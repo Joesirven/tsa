@@ -7,17 +7,24 @@ function JournalList() {
     const [journals, setJournals] = useState([])
     const {token} = useAuthContext()
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true)
 
-    const getUserIdFromToken = (token) => {
-        const tokenParts = token.split(".");
-        if (tokenParts.length === 3) {
-            const payload = JSON.parse(atob(tokenParts[1]));
-            const user_id = payload.account.id;
-            return user_id;
-        }
-        return null;
-        };
+    const getUserIdFromToken = async (token) => {
+        try {
+            const tokenUrl = `http://localhost:8000/token`
+            const response = await fetch(tokenUrl, {
+                headers: { "Authorization": `Bearer ${token}` },
+                credentials : "include" , 
+            })
+            if (response.ok) {
+                const data =await response.json()
+            } else {
+                console.error("Request error:", response.status)
+            }
+        } catch (e) {
+            console.error("An error occured with request:", e);
+        }        
+    }
 
     const getData = async () => {
         setIsLoading(true)
@@ -29,8 +36,7 @@ function JournalList() {
             })
             if (response.ok) {
                 const data = await response.json()
-                const filteredJournals = data.filter((journal) => journal.users_id === user_id)
-                setJournals(filteredJournals)
+                setJournals(data)
             } else {
                 console.error("Request error:", response.status)
             }
@@ -46,12 +52,10 @@ function JournalList() {
         navigate(`/journal/${journal.id}?user_id=${user_id}`)
     }
 
-    if (token) {
-        useEffect(() => {
-        getData()
-    }, []) 
-    }
-
+    useEffect(() => {
+        getData(),
+        getUserIdFromToken()
+    }, [token])
 
         return (
         <div>
