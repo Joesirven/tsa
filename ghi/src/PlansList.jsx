@@ -120,7 +120,7 @@ const PlanList = () => {
                 <div>
                   Trip Start:<div>{plan.trip_start_date}</div>
                 </div>
-                <Link to={`/plan/${plan.id}/edit`} className="btn btn-primary">
+                <Link to={`/plans/${plan.id}/edit`} className="btn btn-primary">
                   Edit
                 </Link>
               </div>
