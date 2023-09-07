@@ -1,6 +1,7 @@
 steps = [
     [
         # "Up" SQL statement
+        #MAKE IDS UNIQUE
         """
         CREATE TABLE users (
             id SERIAL PRIMARY KEY NOT NULL,

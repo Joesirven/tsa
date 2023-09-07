@@ -7,7 +7,6 @@ import HomePage from "./HomePage";
 import PlanList from "./PlansList";
 // import Login from "./Login";
 // import Logout from "./Logout";
-// import PlanDetail from "./PlanDetail";
 import PlanCreate from "./PlanCreate";
 import PlanEdit from "./PlanEdit";
 // import Journal from "./Journal";
@@ -15,6 +14,7 @@ import PlanEdit from "./PlanEdit";
 // import JournalCreate from "./JournalCreate";
 // import JournalEdit from "./JournalEdit";
 // import ExpenseCreate from "./ExpenseCreate";
+import PlanDetail from "./PlanDetail";
 
 function App() {
   const baseUrl = "http://localhost:8000"
@@ -28,7 +28,7 @@ function App() {
             <Route path="/Signup" element={<SignupForm />}></Route>
             <Route path="/Login" element={<LoginForm />}></Route>
             <Route path="/plans" element={<PlanList />}></Route>
-            {/* <Route path="/plan/{id}" element={<PlanDetail />}></Route> */}
+            <Route path="/plan/{id}" element={<PlanDetail />}></Route>
             <Route path="/plan/create" element={<PlanCreate />}></Route>
             <Route path="/plan{id}/edit" element={<PlanEdit />}></Route>
             {/* <Route path="/journal" element={<Journal />}></Route>
