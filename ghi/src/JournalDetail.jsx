@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import useToken, { useAuthContext } from "@galvanize-inc/jwtdown-for-react"
 import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 
 function JournalDetail() {
@@ -8,6 +9,7 @@ function JournalDetail() {
     const [isLoading, setIsLoading] = useState(true)
     const [journal, setJournal] = useState([])
     const { id } = useParams()
+    const navigate = useNavigate();
 
 
     const getUserIdFromToken = async (token) => {
@@ -32,7 +34,7 @@ function JournalDetail() {
         try {
             const journalUrl = `http://localhost:8000/journal/${id}`;
             const response = await fetch(journalUrl, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { "Authorization": `Bearer ${token}`  },
             })
             if (response.ok) {
                 const data = await response.json()
@@ -46,6 +48,12 @@ function JournalDetail() {
             setIsLoading(false)
         }
     }
+
+    const handleEditClick = (journal) => {
+        const user_id = getUserIdFromToken(token)
+        navigate(`/journal/${id}/edit`)
+    }
+
 
     useEffect(() => {
         getData(),
@@ -76,7 +84,7 @@ function JournalDetail() {
                 </tbody>
                 </table>
                 <div>
-                    <button>Edit</button>
+                    <button onClick={() => handleEditClick(journal)}>Edit</button>
                 </div>                   
             </div>
         );
