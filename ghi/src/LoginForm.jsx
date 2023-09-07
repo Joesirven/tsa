@@ -1,25 +1,28 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
-const LoginForm = () => {
+const LoginForm = (state) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [displayMessage, setMessage] = useState("alert alert-success d-none");
   const { login, token } = useToken();
   const navigate = useNavigate();
   const [click, setClick] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const location = useLocation();
+  const { state: locationState } = location;
 
+  console.log("this is state LoginForm:16", state)
   useEffect(() => {
     if (token) {
-      navigate("/plans");
       setError(false);
       setMessage("Login Successful");
       setMessageType("success");
+      const redirect = locationState ? locationState.from.pathname : "/plans";
+      navigate(redirect);
     }
     if (!token && click) {
       setTimeout(function () {
