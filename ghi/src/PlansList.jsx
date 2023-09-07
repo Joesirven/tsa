@@ -6,6 +6,7 @@ const PlanList = () => {
   const { token } = useAuthContext();
   const [plans, setPlans] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const getUserIdFromToken = (token) => {
     const tokenParts = token.split(".");
@@ -35,9 +36,11 @@ const PlanList = () => {
           const filteredPlans = data.filter((plan) => plan.users_id === user_id);
 
           setPlans(filteredPlans);
+        } else {
+          setErrorMessage("Failed to fetch data. Please try again later.");
         }
       } catch (error) {
-        
+        setErrorMessage("An error occurred while fetching data.");
       } finally {
         setIsLoading(false);
       }
@@ -68,6 +71,8 @@ const PlanList = () => {
       >
         Plans
       </h1>
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      {isLoading && <div className="loading-indicator">Loading...</div>}
       <div style={{ display: "flex" }}>
         <div style={{ flex: 2, minWidth: "250px" }}>
           {earliestPlan && (
@@ -87,7 +92,10 @@ const PlanList = () => {
                   Trip Start: <div>{earliestPlan.trip_start_date}</div>
                 </div>
               </div>
-              <Link to={`/plans/${earliestPlan.id}`} className="btn btn-primary">
+              <Link
+                to={`/plans/${earliestPlan.id}`}
+                className="btn btn-primary"
+              >
                 Details
               </Link>
             </div>
