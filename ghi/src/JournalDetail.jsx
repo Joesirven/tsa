@@ -1,27 +1,36 @@
 import {useEffect, useState} from "react"
-import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
+import useToken, { useAuthContext } from "@galvanize-inc/jwtdown-for-react"
+import { useParams } from "react-router-dom"
 
 
 function JournalDetail() {
-    const {token} = useAuthContext()
+    const {token} = useToken()
     const [isLoading, setIsLoading] = useState(true)
-    const [journals, setJournal] = useState([]);
+    const [journal, setJournal] = useState([])
+    const { id } = useParams()
 
-    const getUserIdFromToken = (token) => {
-        const tokenParts = token.split(".");
-        if (tokenParts.length === 3) {
-            const payload = JSON.parse(atob(tokenParts[1]));
-            const user_id = payload.account.id;
-            return user_id;
-        }
-        return null;
-        };
 
+    const getUserIdFromToken = async (token) => {
+        try {
+            const tokenUrl = `http://localhost:8000/token`
+            const response = await fetch(tokenUrl, {
+                headers: { "Authorization": `Bearer ${token}` },
+                credentials : "include" , 
+            })
+            if (response.ok) {
+                const data =await response.json()
+            } else {
+                console.error("Request error:", response.status)
+            }
+        } catch (e) {
+            console.error("An error occured with request:", e);
+        }        
+    }
+        
     const getData = async () => {
         setIsLoading(true)
-        const user_id = getUserIdFromToken(token)
         try {
-            const journalUrl = `http://localhost:8000/journal/${journal_id}`;
+            const journalUrl = `http://localhost:8000/journal/${id}`;
             const response = await fetch(journalUrl, {
                 headers: { Authorization: `Bearer ${token}` },
             })
@@ -37,16 +46,15 @@ function JournalDetail() {
             setIsLoading(false)
         }
     }
+
     useEffect(() => {
-        if (token) {
-            getData();
-        }
-    }, [token, journals.id]);
+        getData(),
+        getUserIdFromToken()
+    }, [token])
 
         return (
             <div>
                 <h1>Journal Details</h1>
-
                 <table className="table table-striped">
                 <thead>
                     <tr>
@@ -58,8 +66,6 @@ function JournalDetail() {
                     </tr>
                 </thead>
                 <tbody>
-                    {journals.map(journal => {
-                    return (
                     <tr key={journal.id}>
                         <td>{journal.location}</td>
                         <td>{journal.picture_url}</td>
@@ -67,8 +73,6 @@ function JournalDetail() {
                         <td>{journal.rating}</td>
                         <td>{journal.date}</td>
                     </tr>
-                    );
-                })}
                 </tbody>
                 </table>
                 <div>
