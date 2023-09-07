@@ -1,13 +1,11 @@
 import {useEffect, useState} from "react"
-import { useAuthContext } from "@galvanize-inc/jwtdown-for-react"
-import { useNavigate } from "react-router-dom"
+import { useAuthContext } from "@galvanize-inc/jwtdown-for-react";
 
 
-function JournalList() {
-    const [journals, setJournals] = useState([])
+function JournalDetail() {
     const {token} = useAuthContext()
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true)
+    const [journals, setJournal] = useState([]);
 
     const getUserIdFromToken = (token) => {
         const tokenParts = token.split(".");
@@ -23,14 +21,13 @@ function JournalList() {
         setIsLoading(true)
         const user_id = getUserIdFromToken(token)
         try {
-            const journalUrl = 'http://localhost:8000/journals'
+            const journalUrl = `http://localhost:8000/journal/${journal_id}`;
             const response = await fetch(journalUrl, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             if (response.ok) {
                 const data = await response.json()
-                const filteredJournals = data.filter((journal) => journal.users_id === user_id)
-                setJournals(filteredJournals)
+                setJournal(data)
             } else {
                 console.error("Request error:", response.status)
             }
@@ -40,34 +37,28 @@ function JournalList() {
             setIsLoading(false)
         }
     }
-
-    const handleDetailClick = (journal) => {
-        const user_id = getUserIdFromToken(token)
-        navigate(`/journal/${journal.id}?user_id=${user_id}`)
-    }
-
-    if (token) {
-        useEffect(() => {
-        getData()
-    }, []) 
-    }
-
+    useEffect(() => {
+        if (token) {
+            getData();
+        }
+    }, [token, journals.id]);
 
         return (
-        <div>
-            <h1>Journals</h1>
-            <table className="table table-striped">
+            <div>
+                <h1>Journal Details</h1>
+
+                <table className="table table-striped">
                 <thead>
-                <tr>
+                    <tr>
                     <th>Location</th>
                     <th>Picture URL</th>
                     <th>Description</th>
                     <th>Rating</th>
                     <th>Date</th>
-                </tr>
+                    </tr>
                 </thead>
                 <tbody>
-                {journals.map(journal => {
+                    {journals.map(journal => {
                     return (
                     <tr key={journal.id}>
                         <td>{journal.location}</td>
@@ -75,19 +66,15 @@ function JournalList() {
                         <td>{journal.description}</td>
                         <td>{journal.rating}</td>
                         <td>{journal.date}</td>
-                        <td>
-                            <button onClick={() => handleDetailClick(journal)}
-                            className="btn btn-primary"
-                            >
-                                View my Journal Entry
-                            </button>
-                        </td>
                     </tr>
                     );
                 })}
                 </tbody>
-            </table>
-        </div>
-        )
+                </table>
+                <div>
+                    <button>Edit</button>
+                </div>                   
+            </div>
+        );
     }
-    export default JournalList
+    export default JournalDetail;
