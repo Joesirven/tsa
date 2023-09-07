@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from '@galvanize-inc/jwtdown-for-react';
 import useToken from "@galvanize-inc/jwtdown-for-react";
-// import useToken from "@galvanize-inc/jwtdown-for-react";
 import NavComponent from "./Nav";
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';

@@ -24,7 +24,7 @@ function NavComponent() {
               <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
               <NavDropdown title="Travel Plans" id="basic-nav-dropdown">
                 <NavDropdown.Item as={NavLink} to="/plans">My Plans</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/plan/create">New Plan</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/plans/create">New Plan</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/expense/create">New Expense</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="Travel Journals" id="basic-nav-dropdown">
