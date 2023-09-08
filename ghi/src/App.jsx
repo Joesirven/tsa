@@ -9,6 +9,7 @@ import HomePage from "./HomePage";
 import PlanList from "./PlansList";
 import PlanCreate from "./PlanCreate";
 import PlanEdit from "./PlanEdit";
+import PlanDetail from "./PlanDetail";
 
 function App() {
   const baseUrl = "http://localhost:8000"
@@ -33,7 +34,7 @@ function App() {
               <Route index element={<ProtectedRoute><PlanList /></ProtectedRoute>} />
               <Route path="create" element={<ProtectedRoute><PlanCreate /></ProtectedRoute>} />
               <Route path=":id/edit" element={<ProtectedRoute><PlanEdit /></ProtectedRoute>} />
-              {/* <Route path=":id" element={<ProtectedRoute><PlanDetail /></ProtectedRoute>} /> */}
+              <Route path=":planId" element={<ProtectedRoute><PlanDetail /></ProtectedRoute>} />
             </Route>
             {/* <Route path="/expense">
               <Route path="create" element={<ProtectedRoute><ExpenseCreate /></ProtectedRoute>} />

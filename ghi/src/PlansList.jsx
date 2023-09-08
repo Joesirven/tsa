@@ -31,13 +31,12 @@ const PlanList = () => {
         });
         if (response.ok) {
           const data = await response.json();
-
           const filteredPlans = data.filter((plan) => plan.users_id === user_id);
 
           setPlans(filteredPlans);
         }
       } catch (error) {
-        
+
       } finally {
         setIsLoading(false);
       }

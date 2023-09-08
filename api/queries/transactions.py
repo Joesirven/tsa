@@ -1,13 +1,14 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from queries.pool import pool
 from decimal import Decimal
-from datetime import date
+from datetime import date, timedelta
 from typing import Union, List, Optional
 
 
 class TransactionsIn(BaseModel):
   amount_saved: Decimal
   date: date
+  if_saved: bool
   savings_id: int
 
 
@@ -15,6 +16,7 @@ class TransactionsOut(BaseModel):
   id: int
   amount_saved: Decimal
   date: date
+  if_saved: bool = Field(default = False)
   savings_id: int
 
 class Error(BaseModel):
@@ -28,7 +30,7 @@ class TransactionsRepository:
           with conn.cursor() as db:
             result = db.execute(
               """
-                SELECT id, savings_id, amount_saved, date
+                SELECT id, savings_id, amount_saved, if_saved, date
                 FROM transactions
                 WHERE id = %s
               """,
@@ -70,12 +72,14 @@ class TransactionsRepository:
               UPDATE transactions
               SET savings_id = %s,
                 amount_saved = %s,
+                if_saved = %s,
                 date = %s
               WHERE id = %s
             """,
             [
               transactions.savings_id,
               transactions.amount_saved,
+              transactions.if_saved,
               transactions.date,
               transactions_id
             ]
@@ -92,7 +96,7 @@ class TransactionsRepository:
         with conn.cursor() as db:
           db.execute(
             """
-              SELECT id, savings_id, amount_saved, date
+              SELECT id, savings_id, amount_saved, if_saved, date
               FROM transactions;
             """
           )
@@ -101,7 +105,8 @@ class TransactionsRepository:
               id=record[0],
               savings_id=record[1],
               amount_saved=record[2],
-              date=record[3]
+              if_saved=record[3],
+              date=record[4]
             )
             for record in db
           ]
@@ -119,16 +124,18 @@ class TransactionsRepository:
               (
                 amount_saved,
                 date,
-                savings_id
+                savings_id,
+                if_saved
               )
             VALUES
-              (%s, %s, %s)
+              (%s, %s, %s, %s)
             RETURNING id;
             """,
             [
               transactions.amount_saved,
               transactions.date,
-              transactions.savings_id
+              transactions.savings_id,
+              False
             ]
           )
           id = result.fetchone()[0]
@@ -145,5 +152,6 @@ class TransactionsRepository:
       id=record[0],
       savings_id=record[1],
       amount_saved=record[2],
-      date=record[3]
+      if_saved=record[3],
+      date=record[4]
     )

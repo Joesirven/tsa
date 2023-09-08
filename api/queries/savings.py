@@ -7,7 +7,6 @@ from typing import List, Union, Optional
 class SavingsIn(BaseModel):
   current_amount_saved: Decimal
   final_goal_amount: Decimal
-  if_saved: bool
   plans_id: int
 
 
@@ -15,7 +14,6 @@ class SavingsOut(BaseModel):
   id: int
   current_amount_saved: Decimal
   final_goal_amount: Decimal
-  if_saved: bool
   plans_id: int
 
 
@@ -30,7 +28,7 @@ class SavingsRepository:
         with conn.cursor() as db:
           result = db.execute(
             """
-              SELECT id, plans_id, current_amount_saved, final_goal_amount, if_saved
+              SELECT id, plans_id, current_amount_saved, final_goal_amount
               FROM savings
               WHERE id = %s
             """,
@@ -73,15 +71,13 @@ class SavingsRepository:
               UPDATE savings
               SET plans_id = %s,
                   current_amount_saved = %s,
-                  final_goal_amount = %s,
-                  if_saved = %s
+                  final_goal_amount = %s
               WHERE id = %s
             """,
             [
               savings.plans_id,
               savings.current_amount_saved,
               savings.final_goal_amount,
-              savings.if_saved,
               savings_id
             ]
           )
@@ -89,14 +85,13 @@ class SavingsRepository:
     except Exception as e:
       return {"message": e}
 
-
   def get_all(self) -> Union[Error, List[SavingsOut]]:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
           db.execute(
             """
-              SELECT id, plans_id, current_amount_saved, final_goal_amount, if_saved
+              SELECT id, plans_id, current_amount_saved, final_goal_amount
               FROM savings
             """
           )
@@ -105,8 +100,7 @@ class SavingsRepository:
               id=record[0],
               plans_id=record[1],
               current_amount_saved=record[2],
-              final_goal_amount=record[3],
-              if_saved=record[4]
+              final_goal_amount=record[3]
             )
             for record in db
           ]
@@ -124,18 +118,16 @@ class SavingsRepository:
               (
                 plans_id,
                 current_amount_saved,
-                final_goal_amount,
-                if_saved
+                final_goal_amount
               )
             VALUES
-              (%s, %s, %s, %s)
+              (%s, %s, %s)
             RETURNING id;
             """,
             [
             savings.plans_id,
             savings.current_amount_saved,
-            savings.final_goal_amount,
-            savings.if_saved
+            savings.final_goal_amount
             ]
           )
           id = result.fetchone()[0]
@@ -143,6 +135,7 @@ class SavingsRepository:
     except Exception as e:
       print(e)
       return {"message": e}
+
 
   def savings_in_to_out(self, id:int, savings: SavingsIn):
     old_data = savings.dict()
@@ -153,6 +146,5 @@ class SavingsRepository:
       id=record[0],
       plans_id=record[1],
       current_amount_saved=record[2],
-      final_goal_amount=record[3],
-      if_saved=record[4]
+      final_goal_amount=record[3]
     )
