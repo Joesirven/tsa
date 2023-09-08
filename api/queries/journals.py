@@ -52,7 +52,7 @@ class JournalRepository:
             return None
           return self.record_to_journal_out(entry)
     except Exception as e:
-      print(e)
+      print(f"Exception encountered: {e}")
       return {"message": "could not get journal entry"}
 
 
