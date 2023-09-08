@@ -7,6 +7,7 @@ const PlanDetails = () => {
   const { token } = useAuthContext();
   const { planId } = useParams();
   const [savings, setSavings] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 console.log(planId, "this is the plan id");
 
@@ -28,6 +29,19 @@ console.log(planId, "this is the plan id");
           const planSavings = data.filter((saving) => saving.plans_id == planId);
           setSavings(planSavings);
           console.log("this is savings", savings)
+
+          const transactionsURL = `http://localhost:8000/transactions`;
+          const transactionsResponse = await fetch(transactionsURL, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (transactionsResponse.ok) {
+            const transactionsData = await transactionsResponse.json();
+            const userTransactions = transactionsData.filter((transaction) => transaction.savings_id == planSavings[0]?.id);
+            setTransactions(userTransactions);
+            console.log("this is transactions", transactions)
+          }
         }
       } catch (error) {
         // Handle errors
@@ -48,20 +62,27 @@ console.log(planId, "this is the plan id");
   return (
     <div className="shadow p-3 mt-4">
       <h1 style={{ fontSize: "64px" }}>Plan Details</h1>
-      {/* Render plan details here */}
       <h2>Savings for Plan {planId}</h2>
       <ul>
         {savings.map((saving) => (
           <li key={saving.id}>
             Current Amount Saved: {saving.current_amount_saved}<br />
             Final Goal Amount: {saving.final_goal_amount}<br />
-            If Saved: {saving.if_saved ? "Yes" : "No"}<br />
+          </li>
+        ))}
+      </ul>
+      <h2>Transactions for Plan {planId}</h2>
+      <ul>
+        {transactions.map((transaction) => (
+          <li key={transaction.id}>
+            Amount Saved: {transaction.amount_saved}<br />
+            Date: {transaction.date}<br />
+            If Saved: {transaction.if_saved ? "Yes" : "No"}<br />
           </li>
         ))}
       </ul>
     </div>
   );
-
 };
 
 export default PlanDetails;
