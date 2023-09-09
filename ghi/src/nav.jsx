@@ -21,7 +21,7 @@ function NavComponent() {
         <Nav className="me-auto">
           {token ? (
             <>
-              <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
+              <Nav.Link as={NavLink} to="/">Home</Nav.Link>
               <NavDropdown title="Travel Plans" id="basic-nav-dropdown">
                 <NavDropdown.Item as={NavLink} to="/plans">My Plans</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/plans/create">New Plan</NavDropdown.Item>

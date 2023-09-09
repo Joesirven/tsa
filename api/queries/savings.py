@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from queries.pool import pool
 from decimal import Decimal
 from typing import List, Union, Optional
+from queries.transactions import TransactionsRepository
 
 
 class SavingsIn(BaseModel):
@@ -136,10 +137,42 @@ class SavingsRepository:
       print(e)
       return {"message": e}
 
+  def calculate_current_amount_saved(self, transactions_repo: TransactionsRepository):
+    try:
+      all_transactions = transactions_repo.get_all()
+
+      grouped_transactions = {}
+      for trans in all_transactions:
+        if trans.savings_id not in grouped_transactions:
+          grouped_transactions[trans.savings_id] = []
+        grouped_transactions[trans.savings_id].append(trans)
+
+      all_savings = self.get_all()
+      for savings in all_savings:
+        matching_transactions = grouped_transactions.get(savings.id, [])
+        savings.current_amount_saved = Decimal(0.00)
+        for trans in matching_transactions:
+          if trans.if_saved:
+            savings.current_amount_saved += trans.amount_saved
+        self.update(savings.id, self.savings_out_to_in(savings))
+      return True
+    except Exception as e:
+      print({"error": e})
+      return False
+
+
 
   def savings_in_to_out(self, id:int, savings: SavingsIn):
     old_data = savings.dict()
     return SavingsOut(id=id, **old_data)
+
+  def savings_out_to_in(self, savings: SavingsOut):
+    savings_in = SavingsIn(
+      current_amount_saved = savings.current_amount_saved,
+      final_goal_amount = savings.final_goal_amount,
+      plans_id = savings.plans_id
+    )
+    return savings_in
 
   def record_to_savings_out(self, record):
     return SavingsOut(
