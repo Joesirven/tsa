@@ -8,7 +8,10 @@ const PlanEdit = () => {
   const { token } = useAuthContext();
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  
   const [formData, setFormData] = useState({
     start_of_budget: "",
     end_of_budget: "",
@@ -17,9 +20,6 @@ const PlanEdit = () => {
     destination: "",
     monthly_budget: "",
   });
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchPlanData = async () => {
@@ -36,10 +36,10 @@ const PlanEdit = () => {
           const planData = await response.json();
           setFormData(planData);
         } else {
-          
+          setErrorMessage("Failed to fetch data. Please try again later.");
         }
       } catch (error) {
-        
+        setErrorMessage("An error occurred while fetching data.");
       } finally {
         setIsLoading(false);
       }
@@ -64,16 +64,29 @@ const PlanEdit = () => {
       },
     };
 
+    if (
+      new Date(formData.end_of_budget) <= new Date(formData.start_of_budget) ||
+      new Date(formData.trip_start_date) < new Date(formData.end_of_budget) ||
+      new Date(formData.trip_end_date) < new Date(formData.trip_start_date)
+    ) {
+      setErrorMessage("Please check dates.");
+      setIsLoading(false);
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return;
+    }
+
     try {
       const response = await fetch(url, fetchConfig);
       if (response.ok) {
         setIsSubmitted(true);
         navigate("/plans");
       } else {
-        
+        setErrorMessage("Failed to update data. Please try again later.");
       }
     } catch (error) {
-      
+      setErrorMessage("An error occurred while updating data.");
     } finally {
       setIsLoading(false);
     }
@@ -81,6 +94,34 @@ const PlanEdit = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "end_of_budget") {
+      const startOfBudgetDate = new Date(formData.start_of_budget);
+      const endOfBudgetDate = new Date(value);
+
+      if (endOfBudgetDate <= startOfBudgetDate) {
+        setErrorMessage("End of Budget must be after the Start of Budget");
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 3000);
+        return;
+      }
+    } else if (name === "trip_start_date") {
+      if (new Date(value) < new Date(formData.end_of_budget)) {
+        setErrorMessage("Trip Start Date must be on or after End of Budget");
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 3000);
+        return;
+      }
+    } else if (name === "trip_end_date") {
+      if (new Date(value) < new Date(formData.trip_start_date)) {
+        setErrorMessage("Trip End Date must be on or after Trip Start Date");
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 3000);
+        return;
+      }
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -89,7 +130,9 @@ const PlanEdit = () => {
 
   return (
     <div>
+      {isSubmitted && <Redirect to="/plans" />}
       <h1>Edit Plan</h1>
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <label>Start of Budget:</label>
         <input
@@ -139,6 +182,7 @@ const PlanEdit = () => {
           value={formData.monthly_budget}
           onChange={handleChange}
           required
+          min="0.01"
         />
         <button type="submit" disabled={isLoading}>
           {isLoading ? "Updating..." : "Update"}
