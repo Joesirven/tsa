@@ -4,10 +4,10 @@
 <br />
 <div align="center">
   <a href="https://gitlab.com/team-10HR/travel-saver-app">
-    <img src="images/futurefly_logo.svg" alt="Logo" width="80" height="80">
+    <img src="images/futurefly_logo.svg" alt="Logo" width="200" height="200">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Future Fly</h3>
 
   <p align="center">
     Save Now, Soar Later.
@@ -29,7 +29,11 @@ Every journey starts with a single step – and a smart savings plan. Start your
 
 [![Project Name Screen Shot][project-screenshot]](https://gitlab.com/team-10HR/travel-saver-app)
 
-Our platform is designed for the budget-conscious traveler who yearns for new horizons but is mindful of expenses. By visualizing your savings and breaking down your travel costs month by month, FutureFly empowers you to plan ahead and make those dream destinations a reality. Whether you're a solo adventurer or planning a family getaway, FutureFly is your co-pilot in turning travel aspirations into tangible adventures. Start your journey with FutureFly, where your next adventure is just a plan away.
+Our platform is designed for the budget-conscious traveler who yearns for new horizons but is mindful of expenses.
+
+By visualizing your savings and breaking down your travel costs month by month, FutureFly empowers you to plan ahead and make those dream destinations a reality. Whether you're a solo adventurer or planning a family getaway, FutureFly is your co-pilot in turning travel aspirations into tangible adventures.
+
+Start your journey with FutureFly, where your next adventure is just a plan away.
 
 ### Design
 
@@ -41,19 +45,7 @@ Our platform is designed for the budget-conscious traveler who yearns for new ho
 
 ### Built With
 
-* [![React][React.js]][React-url]
-* [! [Django]]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
-* [![FastAPI][Fastapi.tiangolo.com]][Fastapi-url]
-* [![React][React.js]][React-url]
-* [![ReactRouter][ReactRouter.com]][ReactRouter-url]
-* [![Docker][Docker.com]][Docker-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![HTML5][HTML5.com]][HTML5-url]
-* [![Python][Python.org]][Python-url]
-* [![Javascript][Javascript.com]][Javascript-url]
-* [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
+[![React][React.js]][React-url] [![Django][DjangoProject.com]][Django-url] [![Bootstrap][Bootstrap.com]][Bootstrap-url] [![FastAPI][Fastapi.tiangolo.com]][Fastapi-url] [![React][React.js]][React-url] [![ReactRouter][ReactRouter.com]][ReactRouter-url] [![Docker][Docker.com]][Docker-url] [![Bootstrap][Bootstrap.com]][Bootstrap-url] [![HTML5][HTML5.com]][HTML5-url] [![Python][Python.org]][Python-url] [![Javascript][Javascript.com]][Javascript-url] [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -95,11 +87,10 @@ To get a local copy of Health and Swolleness up and running on your machine foll
 
 ## Contact
 
-* [![Contributors][britley-desir]][britley-url]
-* [![Contributors][dominick-cross]][dom-url]
-* [![Contributors][jose-sirven]][jose-url]
-* [![Contributors][tamekia-n]][tamekia-url]
-
+[![Contributors][britley-desir]][britley-url]
+[![Contributors][dominick-cross]][dom-url]
+[![Contributors][tamekia-n]][tamekia-url]
+[![Contributors][jose-sirven]][jose-url]
 
 ## Ackowledgements
 
@@ -138,8 +129,7 @@ To get a local copy of Health and Swolleness up and running on your machine foll
 [ReactRouter.com]: https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white
 [ReactRouter-url]: https://reactrouter.com/en/main
 
-
-[britley-desir]: https://img.shields.io/badge/Britley-Desir-0A66C2?logo=linkedin&style=for-the-badge
+[britley-desir]: https://img.shields.io/badge/Britley_Desir-0A66C2?logo=linkedin&style=for-the-badge
 [britley-url]: https://www.linkedin.com/in/britleydesir/
 
 [jose-sirven]: https://img.shields.io/badge/Jose_Sirven-0A66C2?logo=linkedin&style=for-the-badge
