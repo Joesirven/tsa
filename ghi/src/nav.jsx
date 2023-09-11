@@ -2,15 +2,13 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import useToken from '@galvanize-inc/jwtdown-for-react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+
 
 function NavComponent() {
   const { token, logout, } = useToken();
-  // const navigate = useNavigate();
 
   function handleLogout() {
     logout();
-    // navigate("/");
   }
 
   return (
