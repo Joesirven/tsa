@@ -19,7 +19,6 @@ async def create_plan(
   repo: PlansRepository = Depends(),
   user_data: dict = Depends(authenticator.get_current_account_data),
 ):
-  print("here")
   return repo.create(plan)
 
 

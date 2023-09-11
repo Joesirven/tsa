@@ -32,8 +32,6 @@ class UserOutWithPassword(UserOut):
 
 class UserRepository:
   def get_one(self, email: str) -> UserOutWithPassword:
-    # print(f"id in get {id} ")
-    # print(type(id))
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -50,9 +48,7 @@ class UserRepository:
             """,
             [email],
           )
-          print(f"db in get {db}")
           entry = db.fetchone()
-          print(f"in get {entry}")
           if entry is None:
             return None
           fields = [
@@ -84,7 +80,6 @@ class UserRepository:
                 )
                 return True
     except Exception as e:
-      print(e)
       return False
 
 
@@ -114,7 +109,6 @@ class UserRepository:
 
           return self.user_in_to_out(user_id, user)
     except Exception as e:
-      print(e)
       return {"message": "could not update user "}
 
 
@@ -145,7 +139,6 @@ class UserRepository:
             for entry in db
           ]
     except Exception as e:
-      print(e)
       return {"message": "could not get users"}
 
 
@@ -174,8 +167,6 @@ class UserRepository:
             ]
           )
           data = db.fetchone()[0]
-          print(f"data from sql {data}")
-          print(f"user data {user.email}")
           user_dict = {
             "id": data,
             "first_name": user.first_name,
@@ -194,7 +185,6 @@ class UserRepository:
 
 
   def user_in_to_out_password(self, user: UserIn):
-    print(f"this is is old data: {user}")
     return UserOutWithPassword(**user)
 
 
