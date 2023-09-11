@@ -43,7 +43,6 @@ class ExpenseRepository:
                         return None
                     return self.record_to_expense_out(record)
         except Exception as e:
-            print(e)
             return {"message": "Could not get that expense"}
 
     def delete(self, expense_id: int) -> bool:
@@ -59,7 +58,6 @@ class ExpenseRepository:
                     )
                     return True
         except Exception as e:
-            print(e)
             return False
 
     def update(self, expense_id: int, expense: ExpenseIn) -> Union[ExpenseOut, Error]:
@@ -87,7 +85,6 @@ class ExpenseRepository:
                     )
                     return self.expense_in_to_out(expense_id, expense)
         except Exception as e:
-            print(e)
             return {"message": "Could not update expense"}
 
     def get_all(self) -> Union[Error, List[ExpenseOut]]:
@@ -106,7 +103,6 @@ class ExpenseRepository:
                         for record in result
                     ]
         except Exception as e:
-            print(e)
             return {"message": "Could not get all expenses"}
 
     def create(self, expense: ExpenseIn) -> Union[ExpenseOut, Error]:
@@ -136,7 +132,6 @@ class ExpenseRepository:
                     id = result.fetchone()[0]
                     return self.expense_in_to_out(id, expense)
         except Exception as e:
-            print(e)
             return {"message": "Could not create expense"}
 
     def expense_in_to_out(self, id: int, expense: ExpenseIn):

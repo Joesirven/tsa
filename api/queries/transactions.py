@@ -55,7 +55,6 @@ class TransactionsRepository:
           )
           return True
     except Exception as e:
-        print(e)
         return False
 
 
@@ -78,7 +77,6 @@ class TransactionsRepository:
           )
           return self.transactions_in_to_out(transactions_id, transactions)
     except Exception as e:
-      print(e)
       return {"message": e}
 
 

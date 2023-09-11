@@ -33,8 +33,7 @@ class PlansOut(BaseModel):
 class PlansRepository:
   def get_one(
     self,
-    plan_id:int
-    # user_data: dict = Depends(authenticator.get_current_account_data),
+    plan_id:int,
     ) -> Optional[PlansOut]:
     try:
       with pool.connection() as conn:
@@ -66,8 +65,7 @@ class PlansRepository:
 
   def delete(
     self,
-    plan_id: int
-    # user_data: dict = Depends(authenticator.get_current_account_data),
+    plan_id: int,
     ) -> bool:
     try:
       with pool.connection() as conn:
@@ -81,20 +79,16 @@ class PlansRepository:
           )
           return True
     except Exception as e:
-        print(e)
         return False
 
 
   def update(
     self,
     plan_id: int,
-    plan: PlansIn
-    # user_data: dict = Depends(authenticator.get_current_account_data),
+    plan: PlansIn,
     ) -> Union[Error, PlansOut]:
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
           db.execute(
             """
@@ -120,25 +114,18 @@ class PlansRepository:
                 plan_id,
               ]
           )
-          # old_data = plan.dict()
-          # return PlansOut(id=plan_id, **old_data)
           return self.plan_in_to_out(plan_id, plan)
     except Exception as e:
-      print(e)
       return {"message": "Could not get all plans."}
 
 
 
   def get_all(
-    self
-    # user_data: dict = Depends(authenticator.get_current_account_data),
+    self,
   ) -> Union[Error, List[PlansOut]]:
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
-        #Run our SELECT statement
           result =  db.execute(
             """
             SELECT id, start_of_budget, end_of_budget, trip_start_date, trip_end_date, destination, monthly_budget, users_id
@@ -160,20 +147,15 @@ class PlansRepository:
               for record in db
             ]
     except Exception as e:
-      print(e)
       return {"message": "Could not get all plans."}
 
   def create(
     self,
-    plan: PlansIn
-    # user_data: dict = Depends(authenticator.get_current_account_data),
+    plan: PlansIn,
   ) -> Union[PlansOut, Error]:
     try:
-      #connect the databse
       with pool.connection() as conn:
-        #get a cursor (something to run SQL with)
         with conn.cursor() as db:
-        # Run our INSERT statement
           result = db.execute(
             """
             INSERT INTO plans
@@ -201,12 +183,8 @@ class PlansRepository:
             ]
           )
           id = result.fetchone()[0]
-          print(f"result in db: {result}")
-          # old_data = plan.dict()
-          # return PlansOut(id=id, **old_data)
           return self.plan_in_to_out(id, plan)
     except Exception as e:
-      print(e)
       return {"message": "Could not create plan."}
 
   def plan_in_to_out(self, id: int, plan: PlansIn):

@@ -41,7 +41,6 @@ class SavingsRepository:
             return None
           return self.record_to_savings_out(record)
     except Exception as e:
-      print(e)
       return {"message": e}
 
 
@@ -58,7 +57,6 @@ class SavingsRepository:
           )
           return True
     except Exception as e:
-        print(e)
         return False
 
 
@@ -134,14 +132,15 @@ class SavingsRepository:
           id = result.fetchone()[0]
           return self.savings_in_to_out(id, savings)
     except Exception as e:
-      print(e)
       return {"message": e}
 
-  def savings_in_to_out(self, id:int, savings: SavingsIn):
+
+  def savings_in_to_out(self, id:int, savings: SavingsIn,):
     old_data = savings.dict()
     return SavingsOut(id=id, **old_data)
 
-  def record_to_savings_out(self, record):
+
+  def record_to_savings_out(self, record,):
     return SavingsOut(
       id=record[0],
       current_amount_saved=record[1],
