@@ -60,7 +60,7 @@ const HomePage = () => {
     tripAdvisorLink: "https://www.tripadvisor.com/Tourism-g61000-Yosemite_National_Park_California-Vacations.html"
   },
   {
-    title: "Longon, UK",
+    title: "London, UK",
     imgSrc: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/33/f5/de/london.jpg?w=1600&h=1100&s=1",
     description: "A regal city surrounded by a rush of modern life",
     tripAdvisorLink: "https://www.tripadvisor.com/Tourism-g186338-London_England-Vacations.html"
