@@ -61,7 +61,7 @@ class PlansRepository:
             return None
           return self.record_to_plan_out(record)
     except Exception as e:
-      return {"message": e}
+      return {"message": "could not get plan"}
 
 
   def delete(
@@ -220,7 +220,7 @@ class PlansRepository:
       end_of_budget=record[2],
       trip_start_date=record[3],
       trip_end_date=record[4],
-      destination=record[5],
-      monthly_budget=record[6],
+      destination=str(record[5]),
+      monthly_budget=Decimal(record[6]),
       users_id=record[7]
     )

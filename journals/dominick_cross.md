@@ -42,3 +42,6 @@ Creating a plan on the frontend is fully functional now.
 
 # 6 September
 Creating a new plan sends the user to the plans list page. Edit on plan list sends to an edit plan page form and when submitted returns the user back to the plans list page. The current plan on the list plan page (hopefully) sends the user to the plan detail page. Plans list page now shows all of the plans belonging to the logged in user.
+
+# 7 September
+Implemented error handling and added error messages for plan pages.
