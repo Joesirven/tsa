@@ -57,25 +57,23 @@ The installation instructions assume your system has the following software: [Go
 
 If you don't have these (or equivalent) software, please install them before proceeding.
 
-To get a local copy of Health and Swolleness up and running on your machine follow these simple steps.
+To get a local copy of FutureFly up and running on your machine follow these simple steps.
 
 ### Installation
 
-1. Fork and clone the [repository](https://gitlab.com/the-stay-at-homies/module3-project-gamma)
+1. Fork and clone the [repository](https://gitlab.com/team-10HR/travel-saver-app)
 
 2. Rename the .env.sample file to .env
 
 3. Remove the .gitlab-ci.yml file
 
-4. Run `docker volume create pg-admin`
+4. Run `docker volume create fastapi-data`
 
-5. Run `docker volume create fastapi-data`
+5. Run `docker compose build`
 
-6. Run `docker compose build`
+6. Run `docker compose up`
 
-7. Run `docker compose up`
-
-8. Navigate to [localhost:3000](http://localhost:3000/)
+7. Navigate to [localhost:3000](http://localhost:3000/)
 
 ## Roadmap
 
