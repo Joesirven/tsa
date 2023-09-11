@@ -42,3 +42,19 @@
 .read-the-docs {
   color: #888;
 }
+
+.hero-section {
+    height: 500px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    height: 100%;
+    padding-top: 10%;
+    background-color: rgba(0, 0, 0, 0.3); /* Optional: Add a translucent background for better text visibility */
+}
+
+.destination-carousel {
+    max-width: 100%;
+}
