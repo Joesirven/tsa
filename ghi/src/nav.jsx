@@ -2,15 +2,12 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import useToken from '@galvanize-inc/jwtdown-for-react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 
 function NavComponent() {
   const { token, logout, } = useToken();
-  // const navigate = useNavigate();
 
   function handleLogout() {
     logout();
-    // navigate("/");
   }
 
   return (
@@ -25,7 +22,6 @@ function NavComponent() {
               <NavDropdown title="Travel Plans" id="basic-nav-dropdown">
                 <NavDropdown.Item as={NavLink} to="/plans">My Plans</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/plans/create">New Plan</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/expense/create">New Expense</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="Travel Journals" id="basic-nav-dropdown">
                 <NavDropdown.Item as={NavLink} to="/journal">My Journals</NavDropdown.Item>

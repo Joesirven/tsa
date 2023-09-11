@@ -45,3 +45,12 @@ Creating a new plan sends the user to the plans list page. Edit on plan list sen
 
 # 7 September
 Implemented error handling and added error messages for plan pages.
+
+# 8 September
+Working on unit test.
+
+# 9 September
+Finished unit test.
+
+# 11 September
+Clean up.

@@ -22,10 +22,8 @@ function JournalDetail() {
             if (response.ok) {
                 const data =await response.json()
             } else {
-                console.error("Request error:", response.status)
             }
         } catch (e) {
-            console.error("An error occured with request:", e);
         }        
     }
         
@@ -40,10 +38,8 @@ function JournalDetail() {
                 const data = await response.json()
                 setJournal(data)
             } else {
-                console.error("Request error:", response.status)
             }
         } catch (e) {
-            console.error("An error occured with request:", e)
         } finally {
             setIsLoading(false)
         }

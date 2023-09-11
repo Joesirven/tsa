@@ -25,7 +25,6 @@ const PlanDetail = () => {
         setSavings(planSavings);
       }
     } catch (error) {
-      console.log(error)
     }
   }
 
@@ -47,7 +46,6 @@ const PlanDetail = () => {
         setCheckValues(arr);
       }
     } catch (error) {
-      console.log(error)
     }
   }
 
@@ -66,15 +64,12 @@ const PlanDetail = () => {
     const arr = [...checkValues.slice(0,i), !checkValues[i], ...checkValues.slice(i+1)]
     setCheckValues(arr)
     const transactionId = transaction.id
-    console.log("transactionID", transactionId)
-    console.log("before checkValues", checkValues)
     const data = {
       amount_saved: transaction.amount_saved,
       date: transaction.date,
       if_saved: transaction.if_saved ? false : true,
       savings_id: transaction.savings_id
     }
-    console.log("data", data)
     try {
       const transactionURL = `http://localhost:8000/transactions/${transactionId}`;
       const response = await fetch(transactionURL, {
@@ -85,12 +80,9 @@ const PlanDetail = () => {
         },
         body: JSON.stringify(data),
       });
-      console.log("response of handleIfSaved outside", response)
       if (response.ok) {
-        console.log("response of handleIfSaved inside", response)
         fetchTransactions();
         fetchSavings();
-        console.log("after checkValues", checkValues)
       }
     } catch (error) {
     }

@@ -15,7 +15,6 @@ const LoginForm = (state) => {
   const location = useLocation();
   const { state: locationState } = location;
 
-  console.log("this is state LoginForm:16", state)
   useEffect(() => {
     if (token) {
       setError(false);
