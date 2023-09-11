@@ -19,10 +19,8 @@ function JournalList() {
             if (response.ok) {
                 const data =await response.json()
             } else {
-                console.error("Request error:", response.status)
             }
         } catch (e) {
-            console.error("An error occured with request:", e);
         }        
     }
 
@@ -37,10 +35,8 @@ function JournalList() {
                 const data = await response.json()
                 setJournals(data)
             } else {
-                console.error("Request error:", response.status)
             }
         } catch (e) {
-            console.error("An error occured with request:", e)
         } finally {
             setIsLoading(false)
         }

@@ -26,7 +26,6 @@ function JournalEdit() {
         const journalUrl = `http://localhost:8000/journal/${id}`;
 
         if (!formData.location || !formData.description || !formData.date || !formData.rating) {
-            console.error("Please fill in all required fields.")
             setIsLoading(false)
             return
         }
@@ -44,16 +43,12 @@ function JournalEdit() {
         try {
             const response = await fetch(journalUrl, fetchConfig)
             if (!response.ok) {
-                console.error("Request error:", response.status)
                 const errorMessage = await response.text()
-                console.error("Server Error:", errorMessage)
             } else {
                 setIsSubmitted(true)
                 navigate("/journal")
-                console.log("succes")
             }
         } catch(e){
-            console.error("Request Error", e)
 
         } finally {
             setIsLoading(false)
@@ -102,7 +97,6 @@ function JournalEdit() {
 
                 }       
             } catch (e) {
-                console.error("Request Error", e);
             }
         }
     }, [token]);

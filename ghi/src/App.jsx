@@ -13,7 +13,6 @@ import JournalList from "./JournalList";
 import JournalDetail from "./JournalDetail";
 import JournalCreate from "./JournalCreate";
 import JournalEdit from "./JournalEdit";
-// import ExpenseCreate from "./ExpenseCreate";
 
 import PlanDetail from "./PlanDetail";
 
@@ -42,9 +41,6 @@ function App() {
               <Route path=":id/edit" element={<ProtectedRoute><PlanEdit /></ProtectedRoute>} />
               <Route path=":planId" element={<ProtectedRoute><PlanDetail /></ProtectedRoute>} />
             </Route>
-            {/* <Route path="/expense">
-              <Route path="create" element={<ProtectedRoute><ExpenseCreate /></ProtectedRoute>} />
-            </Route>*/}
             <Route path="journal">
               <Route index element={<ProtectedRoute><JournalList /></ProtectedRoute>} />
               <Route path=":id" element={<ProtectedRoute><JournalDetail /></ProtectedRoute>} />
