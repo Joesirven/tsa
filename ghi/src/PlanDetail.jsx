@@ -106,6 +106,7 @@ const PlanDetail = () => {
       if (response.ok) {
         console.log("response of handleIfSaved inside", response)
         fetchTransactions();
+        fetchSavings();
         console.log("after checkValues", checkValues)
         //console.log("old transaction before loop, state", transactions)
         // const updatedTransactions = transactions.map((transaction) => {
@@ -132,40 +133,40 @@ const PlanDetail = () => {
 
   return (
     <div className="shadow p-3 mt-4">
+{/*
       <h1 style={{ fontSize: "64px" }}>Plan Details</h1>
-      <h2>Savings for Plan {planId}</h2>
-      <ul>
+      <h2>Savings for Plan {planId}</h2> */}
+      <div>
         {savings.map((saving) => (
-          <li key={saving.id}>
-            Current Amount Saved: {saving.current_amount_saved}<br />
-            Final Goal Amount: {saving.final_goal_amount}<br />
-          </li>
+          <h3 key={saving.id}>
+            Current Amount Saved: ${saving.current_amount_saved}<br />
+            Final Goal Amount: ${saving.final_goal_amount}<br />
+          </h3>
         ))}
-      </ul>
-      <h2>Transactions for Plan {planId}</h2>
-      <ul>
-        {transactions?.map((transaction, i) => (
-          <li key={transaction.id}>
-            ID: {transaction.id}
-            Amount to Save: {transaction.amount_saved}<br />
-            Date: {transaction.date}<br />
-            If Saved:{" "}
-            <div className="form-check form-switch">
-              {checkValues.length > 0 && checkValues[i] ?
-                <input checked onChange={() => handleIfSaved(transaction, i)}
-                className="form-check-input" value={checkValues[i]} type="checkbox" id="flexSwitchCheckDefault"/>
-                :
-                <input onChange={() => handleIfSaved(transaction, i)}
-                className="form-check-input" value={checkValues[i]} type="checkbox" id="flexSwitchCheckDefault"/>
-              }
-              {/* <input onChange={() => handleIfSaved(transaction, i)}
-                className="form-check-input" value={checkValues[i]} type="checkbox" id="flexSwitchCheckDefault"/> */}
-              <label className="form-check-label" htmlFor="flexSwitchCheckDefault"></label>
+      </div>
+        <h3>Monthly Goals</h3>
+          {transactions?.map((transaction, i) => (
+      <div className="card">
+            <div className="card-body" key={transaction.id}>
+              Amount to Save: ${transaction.amount_saved}<br />
+              Date: {transaction.date}<br />
+              If Saved:{" "}
+              <div className="form-check form-switch">
+                {checkValues.length > 0 && checkValues[i] ?
+                  <input checked onChange={() => handleIfSaved(transaction, i)}
+                  className="form-check-input" type="checkbox" id="flexSwitchCheckDefault"/>
+                  :
+                  <input onChange={() => handleIfSaved(transaction, i)}
+                  className="form-check-input" type="checkbox" id="flexSwitchCheckDefault"/>
+                }
+                {/* <input onChange={() => handleIfSaved(transaction, i)}
+                  className="form-check-input" value={checkValues[i]} type="checkbox" id="flexSwitchCheckDefault"/> */}
+                <label className="form-check-label" htmlFor="flexSwitchCheckDefault"></label>
+              </div>
+              <br />
             </div>
-            <br />
-          </li>
-        ))}
-      </ul>
+      </div>
+          ))}
     </div>
   );
 };
