@@ -1,44 +1,56 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from '@galvanize-inc/jwtdown-for-react';
+import useToken from "@galvanize-inc/jwtdown-for-react";
+import NavComponent from "./Nav";
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import HomePage from "./HomePage";
 import PlanList from "./PlansList";
-import Nav from "./Nav";
-// import Login from "./Login";
-// import Logout from "./Logout";
-// import PlanDetail from "./PlanDetail";
-// import PlanCreate from "./PlanCreate";
-// import PlanEdit from "./PlanEdit";
-// import Journal from "./Journal";
-// import JournalDetail from "./JournalDetail";
-// import JournalCreate from "./JournalCreate";
-// import JournalEdit from "./JournalEdit";
-// import ExpenseCreate from "./ExpenseCreate";
+import PlanCreate from "./PlanCreate";
+import PlanEdit from "./PlanEdit";
+import JournalList from "./JournalList";
+import JournalDetail from "./JournalDetail";
+import JournalCreate from "./JournalCreate";
+import JournalEdit from "./JournalEdit";
+
+import PlanDetail from "./PlanDetail";
 
 function App() {
   const baseUrl = "http://localhost:8000"
+  function ProtectedRoute({ children }) {
+    const { token } = useToken();
+    if (!token) {
+      return <Navigate to="/Login" replace />;
+    }
+    return <>{children}</>;
+  };
 
   return (
-    <BrowserRouter>
-        <Nav />
-          <div className="container"></div>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/signup" element={<SignupForm />} />
-          <Route path="/plans" element={<PlanList />} />
-          {/* <Route path="/plan/{id}" element={<PlanDetail />} />
-          <Route path="/plan/create" element={<PlanCreate />} />
-          <Route path="/plan{id}/edit" element={<PlanEdit />} />
-          <Route path="/journal" element={<Journal />} />
-          <Route path="/journal/{id}" element={<JournalDetail />} />
-          <Route path="/journal/create" element={<JournalCreate />} />
-          <Route path="/journal/{id}/edit" element={<JournalEdit />} />
-          <Route path="/expense/create" element={<ExpenseCreate />} /> */}
-        </Routes>
-    </BrowserRouter>
+    <div className="container">
+      <BrowserRouter>
+        <AuthProvider baseUrl={baseUrl}>
+          <NavComponent />
+          <Routes>
+            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/Signup" element={<SignupForm />}></Route>
+            <Route path="/Login" element={<LoginForm />}></Route>
+            <Route path="/plans">
+              <Route index element={<ProtectedRoute><PlanList /></ProtectedRoute>} />
+              <Route path="create" element={<ProtectedRoute><PlanCreate /></ProtectedRoute>} />
+              <Route path=":id/edit" element={<ProtectedRoute><PlanEdit /></ProtectedRoute>} />
+              <Route path=":planId" element={<ProtectedRoute><PlanDetail /></ProtectedRoute>} />
+            </Route>
+            <Route path="journal">
+              <Route index element={<ProtectedRoute><JournalList /></ProtectedRoute>} />
+              <Route path=":id" element={<ProtectedRoute><JournalDetail /></ProtectedRoute>} />
+              <Route path="create" element={<ProtectedRoute><JournalCreate /></ProtectedRoute>} />
+              <Route path=":id/edit" element={<ProtectedRoute><JournalEdit /></ProtectedRoute>} />
+            </Route>
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </div>
   );
 }
 

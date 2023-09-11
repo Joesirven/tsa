@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from authenticator import authenticator
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -10,7 +10,7 @@ from routers import (
     journals,
     plans,
     savings,
-    transactions
+    transactions,
 )
 
 app = FastAPI()
@@ -35,7 +35,7 @@ def launch_details():
             "week": 17,
             "day": 5,
             "hour": 19,
-            "min": "00"
+            "min": "00",
         }
     }
 

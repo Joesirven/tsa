@@ -26,4 +26,31 @@ Finished backend authentication.
 Started on plans list frontend.
 
 # 28 August
-Data displayed on plans list page
+Data displayed on plans list page.
+
+# 29 August
+Made form page for making a new plan but can't fully test until login is made. Started on edit plan page.
+
+# 30 August
+We set up frontend authentication
+
+# 31 August
+Plans was not working so we debugged all day to find out they were all async and shouldn't have been.
+
+# 5 September
+Creating a plan on the frontend is fully functional now.
+
+# 6 September
+Creating a new plan sends the user to the plans list page. Edit on plan list sends to an edit plan page form and when submitted returns the user back to the plans list page. The current plan on the list plan page (hopefully) sends the user to the plan detail page. Plans list page now shows all of the plans belonging to the logged in user.
+
+# 7 September
+Implemented error handling and added error messages for plan pages.
+
+# 8 September
+Working on unit test.
+
+# 9 September
+Finished unit test.
+
+# 11 September
+Clean up.

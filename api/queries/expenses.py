@@ -36,14 +36,13 @@ class ExpenseRepository:
                         FROM expenses
                         WHERE id = %s
                         """,
-                        [expense_id]
+                        [expense_id],
                     )
                     record = result.fetchone()
                     if record is None:
                         return None
                     return self.record_to_expense_out(record)
         except Exception as e:
-            print(e)
             return {"message": "Could not get that expense"}
 
     def delete(self, expense_id: int) -> bool:
@@ -55,14 +54,15 @@ class ExpenseRepository:
                         DELETE FROM expenses
                         WHERE id = %s
                         """,
-                        [expense_id]
+                        [expense_id],
                     )
                     return True
         except Exception as e:
-            print(e)
             return False
 
-    def update(self, expense_id: int, expense: ExpenseIn) -> Union[ExpenseOut, Error]:
+    def update(
+        self, expense_id: int, expense: ExpenseIn
+    ) -> Union[ExpenseOut, Error]:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
@@ -82,12 +82,11 @@ class ExpenseRepository:
                             expense.paid,
                             expense.type,
                             expense.plans_id,
-                            expense_id
-                        ]
+                            expense_id,
+                        ],
                     )
                     return self.expense_in_to_out(expense_id, expense)
         except Exception as e:
-            print(e)
             return {"message": "Could not update expense"}
 
     def get_all(self) -> Union[Error, List[ExpenseOut]]:
@@ -102,11 +101,9 @@ class ExpenseRepository:
                         """
                     )
                     return [
-                        self.record_to_expense_out(record)
-                        for record in result
+                        self.record_to_expense_out(record) for record in result
                     ]
         except Exception as e:
-            print(e)
             return {"message": "Could not get all expenses"}
 
     def create(self, expense: ExpenseIn) -> Union[ExpenseOut, Error]:
@@ -130,13 +127,12 @@ class ExpenseRepository:
                             expense.name,
                             expense.cost,
                             expense.paid,
-                            expense.type
-                        ]
+                            expense.type,
+                        ],
                     )
                     id = result.fetchone()[0]
                     return self.expense_in_to_out(id, expense)
         except Exception as e:
-            print(e)
             return {"message": "Could not create expense"}
 
     def expense_in_to_out(self, id: int, expense: ExpenseIn):
@@ -150,5 +146,5 @@ class ExpenseRepository:
             cost=record[2],
             paid=record[3],
             type=record[4],
-            plans_id=record[5]
+            plans_id=record[5],
         )
