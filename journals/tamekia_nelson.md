@@ -44,3 +44,49 @@ Today we started the authenticatio portion for the backend and we ran into sever
 
 August 23rd
 Today we continued to work throught the authentication and made some headway but still have a lot of areas to work on in order to get the sign up, login and logout working properly. We still also need to secure our other endpoints with tokens
+
+August 24th
+Today we finished up the backend authentication for securing the end points and rouaters
+
+August 25th
+Today I started to work on journal list on the front end
+
+## Aug 28- Sept 1
+
+August 28th
+Today was continued work on the journal list, was not able to get data to display because of errors with the authentication and login 
+
+August 29th
+Tried to troubleshoot journal list more and started working on the journal detail in the meantime, will test out once the front end authentication issue is sorted out more
+
+August 30th
+Continued working on journal list and detail, debugging the issues, worked through front end authentiction issues in group
+
+August 31st
+Worked on journal list and detail, trying to get the list to have a button that links to the detail when it is clicked and also starting the skelton for editing a journal
+
+Sept 1
+Today was a no code day -- class break
+
+## Sept 4 - 8
+Sept 4th
+Today was a no code day -- class break
+
+Sept 5th
+Did some debugging, today was not a full of day working on the project since the first half of the day was dedicated to practice assessment
+
+Sept 6th
+Worked through journal issues more today and almost have everything working as expected
+
+Sept 7th
+Got some help to get the list to route to the correct detailed journal and was able to test the edit functionality of journals. Made changes to the journal edit to allow to edit with previous data, made some error handling changes
+
+Sept 8th
+Today was a no code day -- out sick
+
+## Sept 11 - 15
+
+Sept 11th
+Making final updates to project before submission
+
+

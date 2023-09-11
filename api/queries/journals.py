@@ -52,7 +52,7 @@ class JournalRepository:
             return None
           return self.record_to_journal_out(entry)
     except Exception as e:
-      print(e)
+      print(f"Exception encountered: {e}")
       return {"message": "could not get journal entry"}
 
 
@@ -154,10 +154,11 @@ class JournalRepository:
               picture_url,
               description,
               rating,
-              date
+              date,
+              users_id
               )
             VALUES
-              (%s, %s, %s, %s, %s)
+              (%s, %s, %s, %s, %s, %s)
             RETURNING id;
             """,
             [
@@ -166,6 +167,7 @@ class JournalRepository:
             journal.description,
             journal.rating,
             journal.date,
+            journal.users_id
             ]
           )
           id = result.fetchone()[0]

@@ -1,8 +1,12 @@
 from pydantic import BaseModel
 from typing import List, Union, Optional
 from queries.pool import pool
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
+from authenticator import authenticator
+from fastapi import Depends
+from queries.savings import SavingsRepository, SavingsIn, SavingsOut
+from queries.transactions import TransactionsRepository, TransactionsIn, TransactionsOut
 
 class Error(BaseModel):
   message: str
@@ -29,7 +33,11 @@ class PlansOut(BaseModel):
 
 
 class PlansRepository:
-  def get_one(self, plan_id:int) -> Optional[PlansOut]:
+  def get_one(
+    self,
+    plan_id:int
+    # user_data: dict = Depends(authenticator.get_current_account_data),
+    ) -> Optional[PlansOut]:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -55,10 +63,14 @@ class PlansRepository:
             return None
           return self.record_to_plan_out(record)
     except Exception as e:
-      return {"message": e}
+      return {"message": "could not get plan"}
 
 
-  def delete(self, plan_id: int) -> bool:
+  def delete(
+    self,
+    plan_id: int
+    # user_data: dict = Depends(authenticator.get_current_account_data),
+    ) -> bool:
     try:
       with pool.connection() as conn:
         with conn.cursor() as db:
@@ -75,7 +87,12 @@ class PlansRepository:
         return False
 
 
-  def update(self, plan_id: int, plan: PlansIn) -> Union[Error, PlansOut]:
+  def update(
+    self,
+    plan_id: int,
+    plan: PlansIn
+    # user_data: dict = Depends(authenticator.get_current_account_data),
+    ) -> Union[Error, PlansOut]:
     try:
       #connect the databse
       with pool.connection() as conn:
@@ -114,7 +131,10 @@ class PlansRepository:
 
 
 
-  def get_all(self) -> Union[Error, List[PlansOut]]:
+  def get_all(
+    self
+    # user_data: dict = Depends(authenticator.get_current_account_data),
+  ) -> Union[Error, List[PlansOut]]:
     try:
       #connect the databse
       with pool.connection() as conn:
@@ -145,7 +165,16 @@ class PlansRepository:
       print(e)
       return {"message": "Could not get all plans."}
 
-  def create(self, plan: PlansIn) -> PlansOut:
+
+  # def __init__(self):
+  #   self.savings_repository = SavingsRepository
+
+
+  def create(
+    self,
+    plan: PlansIn
+    # user_data: dict = Depends(authenticator.get_current_account_data),
+  ) -> Union[PlansOut, Error]:
     try:
       #connect the databse
       with pool.connection() as conn:
@@ -161,10 +190,11 @@ class PlansRepository:
               trip_start_date,
               trip_end_date,
               destination,
-              monthly_budget
+              monthly_budget,
+              users_id
               )
             VALUES
-              (%s, %s, %s, %s, %s, %s)
+              (%s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
             """,
             [
@@ -174,9 +204,26 @@ class PlansRepository:
             plan.trip_end_date,
             plan.destination,
             plan.monthly_budget,
+            plan.users_id,
             ]
           )
           id = result.fetchone()[0]
+          print(f"result in db: {result}")
+
+          # self.plan_in_to_out(id, plan)
+
+          # duration = (plan.end_of_budget - plan.start_of_budget).days // 30
+          # final_goal_amount = plan.monthly_budget * Decimal(duration)
+
+          # savings = SavingsIn(
+          #   current_amount_saved = Decimal(0.00),
+          #   final_goal_amount = final_goal_amount,
+          #   plans_id = id
+          # )
+          # print(type(id))
+          # print("before savings", savings)
+          # savings_record = self.savings_repository.create(self, savings)
+          # print("this is a savings from plan!", savings_record)
           # old_data = plan.dict()
           # return PlansOut(id=id, **old_data)
           return self.plan_in_to_out(id, plan)
@@ -195,7 +242,7 @@ class PlansRepository:
       end_of_budget=record[2],
       trip_start_date=record[3],
       trip_end_date=record[4],
-      destination=record[5],
-      monthly_budget=record[6],
+      destination=str(record[5]),
+      monthly_budget=Decimal(record[6]),
       users_id=record[7]
     )

@@ -19,7 +19,7 @@ from jwtdown_fastapi.authentication import Token
 from authenticator import authenticator
 from pydantic import BaseModel
 
-class UserFrom(BaseModel):
+class UserForm(BaseModel):
   username: str
   password: str
 
@@ -33,6 +33,19 @@ class HttpError(BaseModel):
 router = APIRouter()
 
 
+@router.get("/token", response_model=UserToken | None)
+async def get_token(
+    request: Request,
+    user: UserOut = Depends(authenticator.try_get_current_account_data)
+) -> UserToken | None:
+    if user and authenticator.cookie_name in request.cookies:
+        return {
+            "access_token": request.cookies[authenticator.cookie_name],
+            "type": "Bearer",
+            "user": user,
+        }
+
+
 @router.post("/user/sign-up", response_model=UserToken | HttpError)
 async def create_user(
   info: UserIn,
@@ -41,15 +54,15 @@ async def create_user(
   repo: UserRepository = Depends()
 ):
   hashed_password = authenticator.hash_password(info.password)
-  print(hashed_password)
+
   try:
     user = repo.create(info, hashed_password)
   except DuplicateUserError:
-    raise HTTPException(
+    return HTTPException(
       status_code = status.HTTP_400_BAD_REQUEST,
       detail = "Cannot create a new user with these credentials"
     )
-  form = UserFrom(username=info.email, password=info.password)
+  form = UserForm(username=info.email, password=info.password)
   token = await authenticator.login(response, request, form, repo)
   return UserToken(user=user, **token.dict())
 
@@ -57,6 +70,7 @@ async def create_user(
 @router.get("/users", response_model=List[UserOutWithPassword])
 def get_all(
   repo: UserRepository = Depends(),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ):
   return repo.get_all()
 
@@ -65,6 +79,7 @@ def update_user(
   user_id: int,
   user: UserIn,
   repo: UserRepository = Depends(),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> Union[Error, UserOut]:
   return repo.update(user_id, user)
 
@@ -72,16 +87,18 @@ def update_user(
 def delete_user(
   user_id: int,
   repo: UserRepository = Depends(),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> bool:
   return repo.delete(user_id)
 
-@router.get("/user/{user_id}", response_model=Optional[UserOut])
+@router.get("/user/{user_email}", response_model=Optional[UserOut])
 def get_one_user(
-  user_id: int,
+  user_email: str,
   response: Response,
   repo: UserRepository = Depends(),
+  # user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> UserOut:
-  user =repo.get_one(user_id)
+  user =repo.get_one(user_email)
   if user is None:
     response.status_code =404
   return user
