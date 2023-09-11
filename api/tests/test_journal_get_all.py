@@ -32,10 +32,12 @@ async def get_all():
             rating=5,
             date="2023-01-01",
             users_id=1,
-            id=1
+            id=1,
         )
     ]
     return journals
+
+
 app.include_router(router)
 
 
@@ -50,7 +52,7 @@ def test_get_journal():
             "description": "This is a sample journal content.",
             "rating": 5,
             "date": "2023-01-01",
-            "users_id": 1
+            "users_id": 1,
         }
     ]
     assert response.json() == expected_response
