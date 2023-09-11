@@ -68,3 +68,7 @@
   display: inline-block;
   margin-right: 1rem;
 }
+
+.hero-overlay h1 {
+    color: white;
+}

@@ -73,11 +73,11 @@ const HomePage = () => {
             <Row className="hero-section">
                 <Col
                     className="d-flex justify-content-center align-items-start hero-overlay"
-                    style={{ backgroundImage: `url(YOUR_LARGE_IMAGE_URL)`, backgroundSize: 'cover' }}
+                    style={{ backgroundImage: `url(https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/ae/5d/ec/caption.jpg?w=1400&h=900&s=1)`, backgroundSize: 'cover' }}
                     xs={12}
                 >
                     <h1 className="text-center">Plan your dream vacation</h1>
-                    <Button className="mx-auto d-block">Create a Plan</Button>
+                    <Button className="mx-auto d-block">Get Started</Button>
                 </Col>
             </Row>
 
