@@ -29,9 +29,7 @@ async def create_plan(
   transactions_repo: TransactionsRepository = Depends(),
   user_data: dict = Depends(authenticator.get_current_account_data),
 ):
-  print("here")
   new_plan = plan_repo.create(plan)
-
   start_date = date(new_plan.start_of_budget.year, new_plan.start_of_budget.month, new_plan.start_of_budget.day)
   end_date = date(new_plan.end_of_budget.year, new_plan.end_of_budget.month, new_plan.end_of_budget.day)
   duration = relativedelta(end_date, start_date).months + 1
