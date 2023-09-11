@@ -45,7 +45,7 @@ Start your journey with FutureFly, where your next adventure is just a plan away
 
 ### Built With
 
-[![React][React.js]][React-url] [![Django][DjangoProject.com]][Django-url] [![Bootstrap][Bootstrap.com]][Bootstrap-url] [![FastAPI][Fastapi.tiangolo.com]][Fastapi-url] [![React][React.js]][React-url] [![ReactRouter][ReactRouter.com]][ReactRouter-url] [![Docker][Docker.com]][Docker-url] [![Bootstrap][Bootstrap.com]][Bootstrap-url] [![HTML5][HTML5.com]][HTML5-url] [![Python][Python.org]][Python-url] [![Javascript][Javascript.com]][Javascript-url] [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
+[![React][React.js]][React-url] [![Bootstrap][Bootstrap.com]][Bootstrap-url] [![FastAPI][Fastapi.tiangolo.com]][Fastapi-url] [![React][React.js]][React-url] [![ReactRouter][ReactRouter.com]][ReactRouter-url] [![Docker][Docker.com]][Docker-url] [![Bootstrap][Bootstrap.com]][Bootstrap-url] [![HTML5][HTML5.com]][HTML5-url] [![Python][Python.org]][Python-url] [![Javascript][Javascript.com]][Javascript-url] [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -92,7 +92,6 @@ To get a local copy of Health and Swolleness up and running on your machine foll
 [![Contributors][tamekia-n]][tamekia-url]
 [![Contributors][jose-sirven]][jose-url]
 
-## Ackowledgements
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
