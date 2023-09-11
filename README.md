@@ -67,7 +67,7 @@ To get a local copy of FutureFly up and running on your machine follow these sim
 
 3. Remove the .gitlab-ci.yml file
 
-4. Run `docker volume create fastapi-data`
+4. Run `docker volume create tsa`
 
 5. Run `docker compose build`
 
