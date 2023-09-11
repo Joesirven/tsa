@@ -38,7 +38,7 @@ build-api-image:
     - docker build --tag $GITLAB_IMAGE:latest ./api
     - docker push $GITLAB_IMAGE:latest
   only:
-    - main
+    - TSA-89-set-up-ci-cd
 
 
 # Build the React/JavaScript front-end
