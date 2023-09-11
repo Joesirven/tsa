@@ -28,12 +28,11 @@ class Expense_type_voRepository:
                         FROM expenses_type_vo
                         WHERE id = %s
                         """,
-                        [expense_type_vo_id]
+                        [expense_type_vo_id],
                     )
                     record = result.fetchone()
                     return self.record_to_expense_type_vo_out(record)
         except Exception as e:
-            print(e)
             return {"message": "Could not get that expense_type_vo"}
 
     def delete(self, expense_type_vo_id: int) -> bool:
@@ -45,14 +44,15 @@ class Expense_type_voRepository:
                         DELETE FROM expenses_type_vo
                         WHERE id = %s
                         """,
-                        [expense_type_vo_id]
+                        [expense_type_vo_id],
                     )
                     return True
         except Exception as e:
-            print(e)
             return False
 
-    def update(self, expense_type_vo_id: int, expense_type_vo: Expense_type_voIn) -> Union[Expense_type_voOut, Error]:
+    def update(
+        self, expense_type_vo_id: int, expense_type_vo: Expense_type_voIn
+    ) -> Union[Expense_type_voOut, Error]:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
@@ -62,14 +62,12 @@ class Expense_type_voRepository:
                         SET name = %s
                         WHERE id = %s
                         """,
-                        [
-                            expense_type_vo.name,
-                            expense_type_vo_id
-                        ]
+                        [expense_type_vo.name, expense_type_vo_id],
                     )
-                    return self.expense_type_vo_in_to_out(expense_type_vo_id, expense_type_vo)
+                    return self.expense_type_vo_in_to_out(
+                        expense_type_vo_id, expense_type_vo
+                    )
         except Exception as e:
-            print(e)
             return {"message": "Could not update expense_type_vo"}
 
     def get_all(self) -> Union[Error, List[Expense_type_voOut]]:
@@ -87,7 +85,6 @@ class Expense_type_voRepository:
                         for record in result
                     ]
         except Exception as e:
-            print(e)
             return {"message": "Could not get all expense_type_vos"}
 
     def create(self, expense_type_vo: Expense_type_voIn) -> Expense_type_voOut:
@@ -104,17 +101,16 @@ class Expense_type_voRepository:
                             (%s)
                         RETURNING id;
                         """,
-                        [
-                            expense_type_vo.name
-                        ]
+                        [expense_type_vo.name],
                     )
                     id = result.fetchone()[0]
                     return self.expense_type_vo_in_to_out(id, expense_type_vo)
         except Exception as e:
-            print(e)
             return {"message": "Could not create expense_type_vo"}
 
-    def expense_type_vo_in_to_out(self, id: int, expense_type_vo: Expense_type_voIn):
+    def expense_type_vo_in_to_out(
+        self, id: int, expense_type_vo: Expense_type_voIn
+    ):
         old_data = expense_type_vo.dict()
         return Expense_type_voOut(id=id, **old_data)
 

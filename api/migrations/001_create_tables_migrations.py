@@ -1,7 +1,7 @@
 steps = [
     [
         # "Up" SQL statement
-        #MAKE IDS UNIQUE
+        # MAKE IDS UNIQUE
         """
         CREATE TABLE users (
             id SERIAL PRIMARY KEY NOT NULL,
@@ -14,7 +14,7 @@ steps = [
         # "Down" SQL statement
         """
         DROP TABLE users;
-        """
+        """,
     ],
     [
         # "Up" SQL statement
@@ -34,7 +34,7 @@ steps = [
         # "Down" SQL statement
         """
         DROP TABLE plans;
-        """
+        """,
     ],
     [
         # "Up" SQL statement
@@ -50,7 +50,7 @@ steps = [
         # "Down" SQL statement
         """
         DROP TABLE savings;
-        """
+        """,
     ],
     [
         # "Up" SQL statement
@@ -67,7 +67,7 @@ steps = [
         # "Down" SQL statement
         """
         DROP TABLE transactions;
-        """
+        """,
     ],
     [
         # "Up" SQL statement
@@ -85,7 +85,7 @@ steps = [
         # "Down" SQL statement
         """
         DROP TABLE expenses;
-        """
+        """,
     ],
     [
         # "Up" SQL statement
@@ -100,7 +100,7 @@ steps = [
         # "Down" SQL statement
         """
         DROP TABLE expenses_type_vo;
-        """
+        """,
     ],
     [
         # "Up" SQL statement
@@ -119,7 +119,6 @@ steps = [
         # "Down" SQL statement
         """
         DROP TABLE journals;
-        """
+        """,
     ],
-
 ]

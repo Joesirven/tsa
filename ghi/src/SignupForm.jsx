@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Alert from 'react-bootstrap/Alert';
 
 const SignupForm = () => {
-//   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
@@ -85,17 +84,6 @@ const SignupForm = () => {
               }}
             />
           </div>
-          {/* <div className="mb-3">
-            <label className="form-label">username</label>
-            <input
-              name="username"
-              type="text"
-              className="form-control"
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
-            />
-          </div> */}
           <div className="mb-3">
             <label className="form-label">Email</label>
             <input
