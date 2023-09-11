@@ -8,6 +8,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './App.css'
+import { NavLink } from 'react-router-dom';
 
 
 const HomePage = () => {
@@ -72,12 +73,14 @@ const HomePage = () => {
         <Container fluid>
             <Row className="hero-section">
                 <Col
-                    className="d-flex justify-content-center align-items-start hero-overlay"
+                    className="d-flex flex-column align-items-start justify-content-center hero-overlay"
                     style={{ backgroundImage: `url(https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/ae/5d/ec/caption.jpg?w=1400&h=900&s=1)`, backgroundSize: 'cover' }}
                     xs={12}
                 >
-                    <h1 className="text-center">Plan your dream vacation</h1>
-                    <Button className="mx-auto d-block">Get Started</Button>
+                    <h1 className="text-white mb-3">Plan your dream vacation</h1>
+                    <NavLink to="/plans/create">
+                        <Button className="mx-auto d-block">Get started</Button>
+                    </NavLink>
                 </Col>
             </Row>
 
@@ -108,17 +111,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-// function HomePage() {
-//   return (
-//     <div className="home-page">
-//       <h1>Travel Saver App</h1>
-//       <h2>Yes, you can take that trip you've always dreamed of.</h2>
-//       <TopDestinations />
-//       <Link to="plans">Plan List</Link>
-//     </div>
-//   );
-// }
-
-// export default HomePage;

@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import useToken from '@galvanize-inc/jwtdown-for-react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
+
 function NavComponent() {
   const { token, logout, } = useToken();
 
@@ -12,7 +13,9 @@ function NavComponent() {
 
   return (
     <Navbar bg="success" expand="lg">
-      <Navbar.Brand as={NavLink} to="/">TSA</Navbar.Brand>
+      <Navbar.Brand as={NavLink} to="/">
+        <img src="/futurefly_hori_logo.svg" alt="FutureFly Logo" width="150"/>
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">

@@ -13,7 +13,6 @@ import JournalList from "./JournalList";
 import JournalDetail from "./JournalDetail";
 import JournalCreate from "./JournalCreate";
 import JournalEdit from "./JournalEdit";
-
 import PlanDetail from "./PlanDetail";
 
 function App() {
