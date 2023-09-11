@@ -14,10 +14,10 @@ function JournalDetail() {
 
     const getUserIdFromToken = async (token) => {
         try {
-            const tokenUrl = `http://localhost:8000/token`
+            const tokenUrl = `${process.env.VITE_REACT_APP_API_HOST}/token`
             const response = await fetch(tokenUrl, {
                 headers: { "Authorization": `Bearer ${token}` },
-                credentials : "include" , 
+                credentials : "include" ,
             })
             if (response.ok) {
                 const data =await response.json()
@@ -26,13 +26,13 @@ function JournalDetail() {
             }
         } catch (e) {
             console.error("An error occured with request:", e);
-        }        
+        }
     }
-        
+
     const getData = async () => {
         setIsLoading(true)
         try {
-            const journalUrl = `http://localhost:8000/journal/${id}`;
+            const journalUrl = `${process.env.VITE_REACT_APP_API_HOST}/journal/${id}`;
             const response = await fetch(journalUrl, {
                 headers: { "Authorization": `Bearer ${token}`  },
             })
@@ -85,7 +85,7 @@ function JournalDetail() {
                 </table>
                 <div>
                     <button onClick={() => handleEditClick(journal)}>Edit</button>
-                </div>                   
+                </div>
             </div>
         );
     }

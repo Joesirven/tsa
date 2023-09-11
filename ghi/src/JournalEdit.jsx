@@ -23,7 +23,7 @@ function JournalEdit() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true);
-        const journalUrl = `http://localhost:8000/journal/${id}`;
+        const journalUrl = `${process.env.VITE_REACT_APP_API_HOST}/journal/${id}`;
 
         if (!formData.location || !formData.description || !formData.date || !formData.rating) {
             console.error("Please fill in all required fields.")
@@ -81,7 +81,7 @@ function JournalEdit() {
                         users_id: user_id,
                     }));
 
-                    const journalUrl = `http://localhost:8000/journal/${id}`
+                    const journalUrl = `${process.env.VITE_REACT_APP_API_HOST}/journal/${id}`
                     fetch(journalUrl, {
                         method: 'GET',
                         headers: {
@@ -100,13 +100,13 @@ function JournalEdit() {
                         }))
                     })
 
-                }       
+                }
             } catch (e) {
                 console.error("Request Error", e);
             }
         }
     }, [token]);
-    
+
     const handleFormChange = (e) => {
         const value = e.target.value
         const inputJournal = e.target.name
@@ -115,22 +115,22 @@ function JournalEdit() {
             [inputJournal]: value
         })
     }
-    
+
     return (
         <div className="row">
             {isSubmitted && <Redirect to="/journal" />}
             <div className="offset-3 col-6">
                 <div className="shadow p-4 mt-4">
                     <h1>Edit Journal Entry</h1>
-                        <form onSubmit={handleSubmit} id="create-journal-form">           
+                        <form onSubmit={handleSubmit} id="create-journal-form">
                         <div className="form-floating mb-3">
                             <input onChange={handleFormChange} value={formData.location} placeholder="Enter Location" required type="text" name="location" id="location" className="form-control" />
                             <label htmlFor="location">Location</label>
-                        </div>          
+                        </div>
                         <div className="form-floating mb-3">
                             <input onChange={handleFormChange} value={formData.picture_url} placeholder="Enter picture url" required type="text" name="picture_url" id="picture_url" className="form-control" />
                             <label htmlFor="picture_url">Picture Url</label>
-                        </div>           
+                        </div>
                         <div className="form-floating mb-3">
                             <input onChange={handleFormChange} value={formData.description} placeholder="Enter description" required type="text" name="description" id="description" className="form-control" />
                             <label htmlFor="description">Description</label>
@@ -144,7 +144,7 @@ function JournalEdit() {
                             <label htmlFor="date">Date</label>
                         </div>
                         <button className="btn btn-primary" disabled={isLoading}>
-                            {isLoading ? "Editing ..." : "Edit Journal Entry"} 
+                            {isLoading ? "Editing ..." : "Edit Journal Entry"}
                         </button>
                     </form>
                 </div>

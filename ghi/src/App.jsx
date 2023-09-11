@@ -18,7 +18,10 @@ import JournalEdit from "./JournalEdit";
 import PlanDetail from "./PlanDetail";
 
 function App() {
-  const baseUrl = "http://localhost:8000"
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const domain = /https?:\/\/[^/]+/;
+  const basename = process.env.PUBLIC_URL.replace(domain, "");
+
   function ProtectedRoute({ children }) {
     const { token } = useToken();
     if (!token) {
@@ -29,7 +32,7 @@ function App() {
 
   return (
     <div className="container">
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <AuthProvider baseUrl={baseUrl}>
           <NavComponent />
           <Routes>

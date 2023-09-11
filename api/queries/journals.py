@@ -52,7 +52,6 @@ class JournalRepository:
             return None
           return self.record_to_journal_out(entry)
     except Exception as e:
-      print(f"Exception encountered: {e}")
       return {"message": "could not get journal entry"}
 
 
@@ -69,7 +68,6 @@ class JournalRepository:
                 )
                 return True
     except Exception as e:
-      print(e)
       return False
 
 
@@ -103,7 +101,6 @@ class JournalRepository:
 
           return self.journal_in_to_out(journal_id, journal)
     except Exception as e:
-      print(e)
       return {"message": "could not update journal entry"}
 
 
@@ -138,7 +135,6 @@ class JournalRepository:
             for entry in db
           ]
     except Exception as e:
-      print(e)
       return {"message": "could not get journal entries"}
 
 
@@ -173,7 +169,6 @@ class JournalRepository:
           id = result.fetchone()[0]
           return self.journal_in_to_out(id, journal)
     except Exception as e:
-      print(e)
       return {"message": "Could not create a journal entry"}
 
 

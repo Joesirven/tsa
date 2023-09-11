@@ -9,7 +9,7 @@ const PlanCreate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   const [formData, setFormData] = useState({
     start_of_budget: "",
     end_of_budget: "",
@@ -24,7 +24,7 @@ const PlanCreate = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const url = "http://localhost:8000/plans/create";
+    const url = `${process.env.VITE_REACT_APP_API_HOST}/plans/create`;
     const fetchConfig = {
       method: "post",
       body: JSON.stringify(formData),
@@ -69,7 +69,7 @@ const PlanCreate = () => {
       const user_id = payload.account.id;
       return user_id;
     }
-    
+
     return null;
   };
 

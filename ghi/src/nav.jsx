@@ -28,7 +28,7 @@ function NavComponent() {
                 <NavDropdown.Item as={NavLink} to="/expense/create">New Expense</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="Travel Journals" id="basic-nav-dropdown">
-                <NavDropdown.Item as={NavLink} to="/journal">My Journals</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/journal">My Entries</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/journal/create">New Entry</NavDropdown.Item>
               </NavDropdown>
               <Nav.Link as={NavLink} onClick={handleLogout}>Log Out</Nav.Link>

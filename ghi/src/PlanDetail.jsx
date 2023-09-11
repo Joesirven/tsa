@@ -14,7 +14,7 @@ const PlanDetail = () => {
 
   const fetchSavings = async () => {
     try {
-      const URL = (`http://localhost:8000/savings`);
+      const URL = (`${process.env.VITE_REACT_APP_API_HOST}/savings`);
       const savingsResponse = await fetch(URL, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ const PlanDetail = () => {
 
   const fetchTransactions = async () => {
     try {
-    const transactionsURL = `http://localhost:8000/transactions`;
+    const transactionsURL = `${process.env.VITE_REACT_APP_API_HOST}/transactions`;
     const transactionsResponse = await fetch(transactionsURL, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const PlanDetail = () => {
     }
     console.log("data", data)
     try {
-      const transactionURL = `http://localhost:8000/transactions/${transactionId}`;
+      const transactionURL = `${process.env.VITE_REACT_APP_API_HOST}/transactions/${transactionId}`;
       const response = await fetch(transactionURL, {
         method: "put",
         headers: {

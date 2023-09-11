@@ -5,7 +5,7 @@ services:
   fastapi:
     environment:
       SIGNING_KEY: ${SIGNING_KEY}
-      CORS_HOST: http://localhost:3000
+      CORS_HOST: ${CORS_HOST}
       DATABASE_URL: postgresql://tsa:tsa@db/tsa
       WAIT_HOSTS: db:5432
       WAIT_BEFORE: 5
@@ -29,9 +29,9 @@ services:
     environment:
       SIGNING_KEY: ${SIGNING_KEY}
       HOST_OS: ${OS}
-      NODE_ENV: development
-      HOST: "0.0.0.0"
-      PUBLIC_URL: http://localhost:3000
+      NODE_ENV: ${NODE_ENV}
+      HOST: ${HOST}
+      PUBLIC_URL: ${PUBLIC_URL}
       VITE_REACT_APP_API_HOST: ${VITE_REACT_APP_API_HOST}
       VITE_REACT_APP_TRIP_ADVISOR_API_KEY: ${VITE_REACT_APP_TRIP_ADVISOR_API_KEY}
       VITE_REACT_APP_GOOGLE_MAPS_API_KEY: ${VITE_REACT_APP_GOOGLE_MAPS_API_KEY}
@@ -42,8 +42,8 @@ services:
       - tsa:/var/lib/postgresql/db
     environment:
       SIGNING_KEY: ${SIGNING_KEY}
-      POSTGRES_PASSWORD: tsa
-      POSTGRES_USER: tsa
-      POSTGRES_DB: tsa
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "15432:5432"

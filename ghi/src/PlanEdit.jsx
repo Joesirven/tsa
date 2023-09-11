@@ -11,7 +11,7 @@ const PlanEdit = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   const [formData, setFormData] = useState({
     start_of_budget: "",
     end_of_budget: "",
@@ -24,7 +24,7 @@ const PlanEdit = () => {
   useEffect(() => {
     const fetchPlanData = async () => {
       try {
-        const url = `http://localhost:8000/plans/${id}`;
+        const url = `${process.env.VITE_REACT_APP_API_HOST}/plans/${id}`;
         const response = await fetch(url, {
           method: "get",
           headers: {
@@ -54,7 +54,7 @@ const PlanEdit = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const url = `http://localhost:8000/plans/${id}`;
+    const url = `${process.env.VITE_REACT_APP_API_HOST}/plans/${id}`;
     const fetchConfig = {
       method: "put",
       body: JSON.stringify(formData),

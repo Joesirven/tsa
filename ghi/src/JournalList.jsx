@@ -11,10 +11,10 @@ function JournalList() {
 
     const getUserIdFromToken = async (token) => {
         try {
-            const tokenUrl = `http://localhost:8000/token`
+            const tokenUrl = `${process.env.VITE_REACT_APP_API_HOST}/token`
             const response = await fetch(tokenUrl, {
                 headers: { "Authorization": `Bearer ${token}` },
-                credentials : "include" , 
+                credentials : "include" ,
             })
             if (response.ok) {
                 const data =await response.json()
@@ -23,13 +23,13 @@ function JournalList() {
             }
         } catch (e) {
             console.error("An error occured with request:", e);
-        }        
+        }
     }
 
     const getData = async () => {
         setIsLoading(true)
         try {
-            const journalUrl = 'http://localhost:8000/journals'
+            const journalUrl = `${process.env.VITE_REACT_APP_API_HOST}/journals`
             const response = await fetch(journalUrl, {
                 headers: { Authorization: `Bearer ${token}` },
             })

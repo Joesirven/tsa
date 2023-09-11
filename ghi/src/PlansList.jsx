@@ -24,7 +24,7 @@ const PlanList = () => {
       setIsLoading(true);
       const user_id = getUserIdFromToken(token);
       try {
-        const URL = "http://localhost:8000/plans";
+        const URL = `${process.env.VITE_REACT_APP_API_HOST}/plans`;
         const response = await fetch(URL, {
           headers: {
             Authorization: `Bearer ${token}`,

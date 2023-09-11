@@ -136,7 +136,6 @@ class ExpenseRepository:
                     id = result.fetchone()[0]
                     return self.expense_in_to_out(id, expense)
         except Exception as e:
-            print(e)
             return {"message": "Could not create expense"}
 
     def expense_in_to_out(self, id: int, expense: ExpenseIn):
