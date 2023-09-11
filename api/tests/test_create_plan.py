@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, Mock
 from fastapi import Response
-from routers.plans import create_plan  # Replace with the actual import path
+from routers.plans import create_plan
 from queries.plans import PlansIn, PlansOut
 
 @pytest.mark.asyncio
@@ -52,4 +52,3 @@ class TestCreatePlanEndpoint:
         mock_plans_repo_instance.create.assert_called_once_with(plan_input)
         mock_response_instance.status_code = 200
 
-    # Add similar test for failure scenario
