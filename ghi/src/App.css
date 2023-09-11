@@ -52,9 +52,19 @@
 .hero-overlay {
     height: 100%;
     padding-top: 10%;
-    background-color: rgba(0, 0, 0, 0.3); /* Optional: Add a translucent background for better text visibility */
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .destination-carousel {
     max-width: 100%;
+}
+
+.carousel-container {
+  overflow: hidden;
+  width: 75rem;
+}
+
+.carousel-card {
+  display: inline-block;
+  margin-right: 1rem;
 }
