@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 from typing import List, Union, Optional
 from queries.pool import pool
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from authenticator import authenticator
 from fastapi import Depends
+from queries.savings import SavingsRepository, SavingsIn, SavingsOut
+from queries.transactions import TransactionsRepository, TransactionsIn, TransactionsOut
 
 class Error(BaseModel):
   message: str
@@ -163,6 +165,11 @@ class PlansRepository:
       print(e)
       return {"message": "Could not get all plans."}
 
+
+  # def __init__(self):
+  #   self.savings_repository = SavingsRepository
+
+
   def create(
     self,
     plan: PlansIn
@@ -202,6 +209,21 @@ class PlansRepository:
           )
           id = result.fetchone()[0]
           print(f"result in db: {result}")
+
+          # self.plan_in_to_out(id, plan)
+
+          # duration = (plan.end_of_budget - plan.start_of_budget).days // 30
+          # final_goal_amount = plan.monthly_budget * Decimal(duration)
+
+          # savings = SavingsIn(
+          #   current_amount_saved = Decimal(0.00),
+          #   final_goal_amount = final_goal_amount,
+          #   plans_id = id
+          # )
+          # print(type(id))
+          # print("before savings", savings)
+          # savings_record = self.savings_repository.create(self, savings)
+          # print("this is a savings from plan!", savings_record)
           # old_data = plan.dict()
           # return PlansOut(id=id, **old_data)
           return self.plan_in_to_out(id, plan)

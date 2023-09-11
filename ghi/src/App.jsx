@@ -7,7 +7,6 @@ import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import HomePage from "./HomePage";
 import PlanList from "./PlansList";
-// import PlanDetail from "./PlanDetail";
 import PlanCreate from "./PlanCreate";
 import PlanEdit from "./PlanEdit";
 import JournalList from "./JournalList";
@@ -16,6 +15,7 @@ import JournalCreate from "./JournalCreate";
 import JournalEdit from "./JournalEdit";
 // import ExpenseCreate from "./ExpenseCreate";
 
+import PlanDetail from "./PlanDetail";
 
 function App() {
   const baseUrl = "http://localhost:8000"
@@ -40,7 +40,7 @@ function App() {
               <Route index element={<ProtectedRoute><PlanList /></ProtectedRoute>} />
               <Route path="create" element={<ProtectedRoute><PlanCreate /></ProtectedRoute>} />
               <Route path=":id/edit" element={<ProtectedRoute><PlanEdit /></ProtectedRoute>} />
-              {/* <Route path=":id" element={<ProtectedRoute><PlanDetail /></ProtectedRoute>} /> */}
+              <Route path=":planId" element={<ProtectedRoute><PlanDetail /></ProtectedRoute>} />
             </Route>
             {/* <Route path="/expense">
               <Route path="create" element={<ProtectedRoute><ExpenseCreate /></ProtectedRoute>} />
@@ -50,7 +50,7 @@ function App() {
               <Route path=":id" element={<ProtectedRoute><JournalDetail /></ProtectedRoute>} />
               <Route path="create" element={<ProtectedRoute><JournalCreate /></ProtectedRoute>} />
               <Route path=":id/edit" element={<ProtectedRoute><JournalEdit /></ProtectedRoute>} />
-            </Route> 
+            </Route>
           </Routes>
         </AuthProvider>
       </BrowserRouter>

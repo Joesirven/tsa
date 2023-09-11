@@ -12,7 +12,7 @@ async def create_savings(
   savings: SavingsIn,
   response: Response,
   repo: SavingsRepository = Depends(),
-    user_data: dict = Depends(authenticator.get_current_account_data),
+  user_data: dict = Depends(authenticator.get_current_account_data),
 ):
     return repo.create(savings)
 
