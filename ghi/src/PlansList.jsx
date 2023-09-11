@@ -32,7 +32,6 @@ const PlanList = () => {
         });
         if (response.ok) {
           const data = await response.json();
-
           const filteredPlans = data.filter((plan) => plan.users_id === user_id);
 
           setPlans(filteredPlans);
@@ -40,6 +39,7 @@ const PlanList = () => {
           setErrorMessage("Failed to fetch data. Please try again later.");
         }
       } catch (error) {
+
         setErrorMessage("An error occurred while fetching data.");
       } finally {
         setIsLoading(false);

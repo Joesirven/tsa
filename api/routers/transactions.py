@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, Response
 from typing import Union, List, Optional
 from queries.transactions import TransactionsIn, TransactionsRepository, TransactionsOut, Error
+from queries.savings import SavingsIn, SavingsRepository
+from routers.savings import update_savings, get_one_savings
 from authenticator import authenticator
 
 
@@ -18,20 +20,26 @@ async def create_transactions(
 
 @router.get("/transactions", response_model=Union[Error, List[TransactionsOut]])
 async def get_all(
-  repo: TransactionsRepository = Depends(),
+  transactions_repo: TransactionsRepository = Depends(),
+  savings_repo: SavingsRepository = Depends(),
   user_data: dict = Depends(authenticator.get_current_account_data),
 ):
-  return repo.get_all()
+  all_transactions = transactions_repo.get_all()
+  savings_repo.calculate_current_amount_saved(transactions_repo)
+  return all_transactions
 
 
 @router.put("/transactions/{transactions_id}", response_model=Union[TransactionsOut, Error])
 async def update_transactions(
   transactions_id: int,
   transactions: TransactionsIn,
-  repo: TransactionsRepository = Depends(),
+  transactions_repo: TransactionsRepository = Depends(),
+  savings_repo: SavingsRepository = Depends(),
   user_data: dict = Depends(authenticator.get_current_account_data),
 ) -> Union[TransactionsOut, Error]:
-  return repo.update(transactions_id, transactions)
+  updated_transaction = transactions_repo.update(transactions_id, transactions)
+  savings_repo.calculate_current_amount_saved(transactions_repo)
+  return updated_transaction
 
 
 @router.delete("/transactions/{transactions_id}", response_model=bool)
