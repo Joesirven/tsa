@@ -19,6 +19,7 @@ class TransactionsOut(BaseModel):
   if_saved: bool = Field(default = False)
   savings_id: int
 
+
 class Error(BaseModel):
   message: str
 
@@ -143,9 +144,11 @@ class TransactionsRepository:
     except Exception as e:
       return {"message": e}
 
+
   def transactions_in_to_out(self, id: int, transactions: TransactionsIn):
     old_data = transactions.dict()
     return TransactionsOut(id=id, **old_data)
+
 
   def record_to_transactions_out(self, record):
     return TransactionsOut(

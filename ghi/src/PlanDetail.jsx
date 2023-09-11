@@ -10,7 +10,6 @@ const PlanDetail = () => {
   const [transactions, setTransactions] = useState([]);
   const [checkValues, setCheckValues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  //console.log(planId, "this is the plan id");
 
   const fetchSavings = async () => {
     try {
@@ -21,9 +20,7 @@ const PlanDetail = () => {
         },
       });
       if (savingsResponse.ok) {
-        //console.log("response is ok");
         const data = await savingsResponse.json();
-        //console.log(data)
         const planSavings = data.filter((saving) => saving.plans_id == planId);
         setSavings(planSavings);
       }
@@ -48,7 +45,6 @@ const PlanDetail = () => {
         const arr = userTransactions?.map(transaction => transaction.if_saved)
         setTransactions(userTransactions);
         setCheckValues(arr);
-        //console.log("this is transactions", transactions)
       }
     } catch (error) {
       console.log(error)
@@ -65,19 +61,6 @@ const PlanDetail = () => {
     savings && savings.length > 0 && fetchTransactions();
   }, [savings]);
 
-  // useEffect(() => {
-  //   let arr = transactions?.map(transaction => transaction.if_saved)
-  //   setCheckValues(arr);
-  // }, [transactions]);
-
-  // const handleInputChange = (i) => {
-  //   const arr = [...checkValues.slice(0,i), !checkValues[i], ...checkValues.slice(i+1)]
-  //   setCheckValues(arr)
-  // }
-
-  // useEffect(() => {
-  //   handleIfSaved()
-  // }, [checkValues])
 
   const handleIfSaved = async (transaction, i) => {
     const arr = [...checkValues.slice(0,i), !checkValues[i], ...checkValues.slice(i+1)]
@@ -108,34 +91,13 @@ const PlanDetail = () => {
         fetchTransactions();
         fetchSavings();
         console.log("after checkValues", checkValues)
-        //console.log("old transaction before loop, state", transactions)
-        // const updatedTransactions = transactions.map((transaction) => {
-        //   console.log("transaction before if statement", transaction)
-        //   if (transaction.id === transactionId) {
-        //     let updatedTransaction =  {
-        //       ...transaction,
-        //       if_saved: !ifSaved,
-        //     }
-        //     console.log("updated transaction in loop", updatedTransaction)
-        //     return updatedTransaction;
-        //   }
-        //   return transaction;
-        // });
-        // console.log("updated", updatedTransactions)
-        // setTransactions(updatedTransactions);
       }
     } catch (error) {
-    // Handle errors
-    } finally {
-        //setIsLoading(false);
-      }
+    }
   };
 
   return (
     <div className="shadow p-3 mt-4">
-{/*
-      <h1 style={{ fontSize: "64px" }}>Plan Details</h1>
-      <h2>Savings for Plan {planId}</h2> */}
       <div>
         {savings.map((saving) => (
           <h3 key={saving.id}>
@@ -159,8 +121,6 @@ const PlanDetail = () => {
                   <input onChange={() => handleIfSaved(transaction, i)}
                   className="form-check-input" type="checkbox" id="flexSwitchCheckDefault"/>
                 }
-                {/* <input onChange={() => handleIfSaved(transaction, i)}
-                  className="form-check-input" value={checkValues[i]} type="checkbox" id="flexSwitchCheckDefault"/> */}
                 <label className="form-check-label" htmlFor="flexSwitchCheckDefault"></label>
               </div>
               <br />

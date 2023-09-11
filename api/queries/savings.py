@@ -86,6 +86,7 @@ class SavingsRepository:
     except Exception as e:
       return {"message": e}
 
+
   def get_all(self) -> Union[Error, List[SavingsOut]]:
     try:
       with pool.connection() as conn:
@@ -137,6 +138,7 @@ class SavingsRepository:
       print(e)
       return {"message": e}
 
+
   def calculate_current_amount_saved(self, transactions_repo: TransactionsRepository):
     try:
       all_transactions = transactions_repo.get_all()
@@ -161,10 +163,10 @@ class SavingsRepository:
       return False
 
 
-
   def savings_in_to_out(self, id:int, savings: SavingsIn):
     old_data = savings.dict()
     return SavingsOut(id=id, **old_data)
+
 
   def savings_out_to_in(self, savings: SavingsOut):
     savings_in = SavingsIn(
@@ -173,6 +175,7 @@ class SavingsRepository:
       plans_id = savings.plans_id
     )
     return savings_in
+
 
   def record_to_savings_out(self, record):
     return SavingsOut(
