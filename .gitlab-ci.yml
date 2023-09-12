@@ -24,6 +24,7 @@ api-unit-tests-job:
   script:
     - cd api
     - pip install -r requirements.txt
+    - export DATABASE_URL='postgresql://tsa:tsa@db/tsa'
     - python -m pytest
 
 # # Build API Image:
