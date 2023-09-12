@@ -25,6 +25,7 @@ api-unit-tests-job:
     - cd api
     - pip install -r requirements.txt
     - export DATABASE_URL='postgresql://tsa:tsa@db/tsa'
+    - export SIGNING_KEY='${SIGNING_KEY}'
     - python -m pytest
 
 # # Build API Image:
