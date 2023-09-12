@@ -39,6 +39,13 @@
   padding: 2em;
 }
 
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 .read-the-docs {
   color: #888;
 }
@@ -60,15 +67,63 @@
 }
 
 .carousel-container {
-  overflow: hidden;
-  width: 75rem;
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 1rem;
 }
 
 .carousel-card {
-  display: inline-block;
-  margin-right: 1rem;
+    display: inline-block;
+    flex: 0 0 auto;
+}
+
+.carousel-card .card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 4.5em;
 }
 
 .hero-overlay h1 {
     color: white;
+}
+
+.carousel-button {
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin: 0 1em;
+    padding: 0.5em 1em;
+    transition: background 0.3s;
+}
+
+.carousel-button:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.carousel-button {
+    font-size: 24px;
+}
+
+.carousel-with-nav {
+    position: relative;
+}
+
+.carousel-nav-icon {
+  position: absolute;
+  top: 50%;
+  font-size: 24px;
+  color: black;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.carousel-nav-icon.left {
+    left: 10px;
+}
+
+.carousel-nav-icon.right {
+    right: 10px;
 }

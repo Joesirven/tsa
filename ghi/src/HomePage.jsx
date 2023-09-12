@@ -1,6 +1,4 @@
 import React from "react";
-// import { Link } from "react-router-dom";
-// import TopDestinations from "./TopDestinations";
 import Carousel from 'react-bootstrap/Carousel';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -9,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './App.css'
 import { NavLink } from 'react-router-dom';
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 
 const HomePage = () => {
@@ -69,7 +68,15 @@ const HomePage = () => {
   ];
 
 
-    return (
+  const scrollRef = React.useRef(null);
+
+  const scrollBy = (amount) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
+    }
+  };
+
+  return (
         <Container fluid>
             <Row className="hero-section">
                 <Col
@@ -83,27 +90,26 @@ const HomePage = () => {
                     </NavLink>
                 </Col>
             </Row>
-
             <Row className="mt-5">
-                <Col xs={12}>
-                    <Carousel className="carousel-container">
-                      {Array.from({ length: Math.ceil(destinations.length / 3) }).map((_, groupIndex) => (
-                        <Carousel.Item key={groupIndex}>
-                          {destinations.slice(groupIndex * 3, (groupIndex * 3) + 3).map((destination, index) => (
-                            <Card key={index} className="carousel-card" style={{ width: '18rem' }}>
-                              <Card.Img variant="top" src={destination.imgSrc} />
-                              <Card.Body>
-                                <Card.Title>{destination.title}</Card.Title>
-                                <Card.Text>
-                                  {destination.description}
-                                </Card.Text>
-                                <Button variant="primary" href={destination.tripAdvisorLink} target="_blank">Learn More</Button>
-                              </Card.Body>
-                            </Card>
-                          ))}
-                        </Carousel.Item>
-                      ))}
+                <Col xs={12} className="carousel-with-nav">
+                    <FaChevronLeft className="carousel-nav-icon left" />
+                    <Carousel className="carousel-container" controls={false} interval={null}>
+                        {destinations.map((destination, index) => (
+                            <Carousel.Item key={index}>
+                                <Card className="carousel-card" style={{ width: '18rem' }}>
+                                    <Card.Img variant="top" src={destination.imgSrc} />
+                                    <Card.Body>
+                                        <Card.Title>{destination.title}</Card.Title>
+                                        <Card.Text>
+                                            {destination.description}
+                                        </Card.Text>
+                                        <Button variant="primary" href={destination.tripAdvisorLink} target="_blank">Learn More</Button>
+                                    </Card.Body>
+                                </Card>
+                            </Carousel.Item>
+                        ))}
                     </Carousel>
+                    <FaChevronRight className="carousel-nav-icon right" />
                 </Col>
             </Row>
         </Container>
