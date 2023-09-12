@@ -59,15 +59,15 @@ build-front-end-job:
     # You need to substitute in your real values for
     # GROUP_NAME, PROJECT_NAME, & WEBSERVICE_NAME below.
     PUBLIC_URL: https://team-10HR.gitlab.io/travel-saver-app
-    REACT_APP_API_HOST: https://DEPLOYED_API_SERVICE.mod3projects.com
+    REACT_APP_API_HOST: https://may-10-et-api.mod3projects.com
   script:
     - cd ghi
     - npm install
     - npm run build
-    - cp build/index.html build/404.html
+    - cp dist/index.html dist/404.html
   artifacts:
     paths:
-      - ghi/build/
+      - ghi/dist/
 
 # # Deploy the React/JavaScript front-end to GitLab pages
 pages:
@@ -80,7 +80,7 @@ pages:
   needs:
     - build-front-end-job
   script:
-    - mv ghi/build/ public
+    - mv ghi/dist/ public
   artifacts:
     paths:
       - public
