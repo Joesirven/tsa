@@ -1,5 +1,4 @@
-import React from "react";
-import Carousel from 'react-bootstrap/Carousel';
+import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -9,8 +8,8 @@ import './App.css'
 import { NavLink } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-
 const HomePage = () => {
+
   const destinations = [
   {
     title: "Yellowstone National Park",
@@ -67,7 +66,6 @@ const HomePage = () => {
   },
   ];
 
-
   const scrollRef = React.useRef(null);
 
   const scrollBy = (amount) => {
@@ -77,43 +75,44 @@ const HomePage = () => {
   };
 
   return (
-        <Container fluid>
-            <Row className="hero-section">
-                <Col
-                    className="d-flex flex-column align-items-start justify-content-center hero-overlay"
-                    style={{ backgroundImage: `url(https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/ae/5d/ec/caption.jpg?w=1400&h=900&s=1)`, backgroundSize: 'cover' }}
-                    xs={12}
-                >
-                    <h1 className="text-white mb-3">Plan your dream vacation</h1>
-                    <NavLink to="/plans/create">
-                        <Button className="mx-auto d-block">Get started</Button>
-                    </NavLink>
-                </Col>
-            </Row>
-            <Row className="mt-5">
-                <Col xs={12} className="carousel-with-nav">
-                    <FaChevronLeft className="carousel-nav-icon left" />
-                    <Carousel className="carousel-container" controls={false} interval={null}>
-                        {destinations.map((destination, index) => (
-                            <Carousel.Item key={index}>
-                                <Card className="carousel-card" style={{ width: '18rem' }}>
-                                    <Card.Img variant="top" src={destination.imgSrc} />
-                                    <Card.Body>
-                                        <Card.Title>{destination.title}</Card.Title>
-                                        <Card.Text>
-                                            {destination.description}
-                                        </Card.Text>
-                                        <Button variant="primary" href={destination.tripAdvisorLink} target="_blank">Learn More</Button>
-                                    </Card.Body>
-                                </Card>
-                            </Carousel.Item>
-                        ))}
-                    </Carousel>
-                    <FaChevronRight className="carousel-nav-icon right" />
-                </Col>
-            </Row>
-        </Container>
-    );
+    <Container>
+      <Row className="hero-section">
+        <Col
+          className="d-flex flex-column align-items-start justify-content-center hero-overlay"
+          style={{ backgroundImage: `url(https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/ae/5d/ec/caption.jpg?w=1400&h=900&s=1)`, backgroundSize: 'cover' }}
+          xs={12}
+        >
+          <h1 className="text-white mb-3">Plan your dream vacation</h1>
+          <NavLink to="/plans/create">
+            <Button className="mx-auto d-block">Get started</Button>
+          </NavLink>
+        </Col>
+      </Row>
+
+      <Row className="mt-5">
+        <Col xs={12} lg={12} className="carousel-with-nav">
+          <FaChevronLeft className="carousel-nav-icon left" onClick={() => scrollBy(-300)} />
+          <div className="carousel-container" ref={scrollRef}>
+            {destinations.map((destination, index) => (
+              <div key={index} className="carousel-card">
+                <Card>
+                  <Card.Img className="carousel-card-img" variant="top" src={destination.imgSrc} />
+                  <Card.Body>
+                    <Card.Title>{destination.title}</Card.Title>
+                    <Card.Text>
+                      {destination.description}
+                    </Card.Text>
+                    <Button variant="primary" href={destination.tripAdvisorLink} target="_blank" rel="noopener noreferrer">Learn More</Button>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
+          </div>
+          <FaChevronRight className="carousel-nav-icon right" onClick={() => scrollBy(300)} />
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
 export default HomePage;

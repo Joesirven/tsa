@@ -37,6 +37,7 @@
 
 .card {
   padding: 2em;
+
 }
 
 .card-title {
@@ -44,7 +45,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 
 .read-the-docs {
   color: #888;
@@ -69,20 +69,30 @@
 .carousel-container {
     display: flex;
     overflow-x: auto;
-    white-space: nowrap;
     gap: 1rem;
+    scroll-snap-type: x mandatory;
+}
+
+.carousel-container .carousel-inner {
+    display: flex;
+    justify-content: space-between;
 }
 
 .carousel-card {
     display: inline-block;
-    flex: 0 0 auto;
+    flex: 1 0 auto;;
+    margin: 5px;
+    scroll-snap-align: start;
+    width: 400px;
+    height: 600px;
+    overflow: hidden;
 }
 
 .carousel-card .card-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 4.5em;
+    max-height: 6.5em;
 }
 
 .hero-overlay h1 {
@@ -90,6 +100,9 @@
 }
 
 .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.3);
     border: none;
     color: white;
@@ -97,14 +110,11 @@
     margin: 0 1em;
     padding: 0.5em 1em;
     transition: background 0.3s;
+    font-size: 24px;
 }
 
 .carousel-button:hover {
     background: rgba(255, 255, 255, 0.5);
-}
-
-.carousel-button {
-    font-size: 24px;
 }
 
 .carousel-with-nav {
@@ -112,12 +122,12 @@
 }
 
 .carousel-nav-icon {
-  position: absolute;
-  top: 50%;
-  font-size: 24px;
-  color: black;
-  z-index: 10;
-  cursor: pointer;
+    position: absolute;
+    top: 50%;
+    font-size: 24px;
+    color: black;
+    z-index: 10;
+    cursor: pointer;
 }
 
 .carousel-nav-icon.left {
@@ -126,4 +136,9 @@
 
 .carousel-nav-icon.right {
     right: 10px;
+}
+
+.carousel-card-img {
+    height: 150px;
+    object-fit: cover;
 }
